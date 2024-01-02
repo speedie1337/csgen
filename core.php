@@ -125,13 +125,12 @@ function convertMarkdownToHTML($contents) {
     $out = $contents;
 
     $specialSyntax = array(
-        '/@csgen:title:\s*([^\s]+)/',
-        '/@csgen:description:\s*([^\s]+)/',
-        '/@csgen:date:\s*([^\s]+)/',
-        '/@csgen:allowComments:\s*([^\s]+)/',
-        '/@csgen:displayTitle:\s*([^\s]+)/',
-        '/@csgen:displayDate:\s*([^\s]+)/',
-        '/@csgen:include:\s*([^\s]+)/',
+        '/@csgen:title:(.*?)(<|$)/',
+        '/@csgen:description:(.*?)(<|$)/',
+        '/@csgen:date:(.*?)(<|$)/',
+        '/@csgen:allowComments:(.*?)(<|$)/',
+        '/@csgen:displayTitle:(.*?)(<|$)/',
+        '/@csgen:displayDate:(.*?)(<|$)/',
     );
 
     $out = $parser->transform($out);
@@ -159,82 +158,40 @@ function convertMarkdownToHTML($contents) {
 
         if (preg_match($pattern, $out, $matches)) {
             switch ($pattern) {
-                case '/@csgen:title:\s*([^\s]+)/':
+                case '/@csgen:title:(.*?)(<|$)/':
                     $ret->title = $matches[1];
                     $ret->title = preg_replace('/<.*?$/', '', $ret->title);
                     $out = removePrefix("@csgen:title:", $out);
 
                     break;
-                case '/@csgen:description:\s*([^\s]+)/':
+                case '/@csgen:description:(.*?)(<|$)/':
                     $ret->description = $matches[1];
                     $ret->description = preg_replace('/<.*?$/', '', $ret->description);
                     $out = removePrefix("@csgen:description:", $out);
 
                     break;
-                case '/@csgen:date:\s*([^\s]+)/':
+                case '/@csgen:date:(.*?)(<|$)/':
                     $ret->date = $matches[1];
                     $ret->date = preg_replace('/<.*?$/', '', $ret->date);
                     $out = removePrefix("@csgen:date:", $out);
 
                     break;
-                case '/@csgen:allowComments:\s*([^\s]+)/':
+                case '/@csgen:allowComments:(.*?)(<|$)/':
                     $ret->allowComments = $matches[1];
                     $ret->allowComments = preg_replace('/<.*?$/', '', $ret->allowComments);
                     $out = removePrefix("@csgen:allowComments:", $out);
 
                     break;
-                case '/@csgen:displayTitle:\s*([^\s]+)/':
+                case '/@csgen:displayTitle:(.*?)(<|$)/':
                     $ret->displayTitle = $matches[1];
                     $ret->displayTitle = preg_replace('/<.*?$/', '', $ret->displayTitle);
                     $out = removePrefix("@csgen:displayTitle:", $out);
 
                     break;
-                case '/@csgen:displayDate:\s*([^\s]+)/':
+                case '/@csgen:displayDate:(.*?)(<|$)/':
                     $ret->displayDate = $matches[1];
                     $ret->displayDate = preg_replace('/<.*?$/', '', $ret->displayDate);
                     $out = removePrefix("@csgen:displayDate:", $out);
-
-                    break;
-                case '/@csgen:include:\s*([^\s]+)/':
-                    if (!empty($matches[0])) {
-                        foreach ($matches as $match) {
-                            if ($match == $matches[0]) {
-                                continue;
-                            }
-
-                            // to get rid of the html tag that is grabbed too
-                            $match = preg_replace('/<.*?$/', '', $match);
-                            $match = "$attachmentLocation/$match";
-
-                            $fileExtension = pathinfo($match, PATHINFO_EXTENSION);
-
-                            $position = strpos($out, $match);
-
-                            if ($position !== false) {
-                                $start = strrpos(substr($out, 0, $position), PHP_EOL) + 1;
-                                $end = strpos($out, PHP_EOL, $position);
-
-                                $before = substr($out, 0, $start);
-                                $after = ($end !== false) ? substr($out, $end + 1) : '';
-                            }
-
-                            if ($fileExtension == 'html') {
-                                if (file_exists($match)) {
-                                    $out = $before . file_get_contents($match) . $after;
-                                }
-                            } else if ($fileExtension == 'css') {
-                                if (file_exists($match)) {
-                                    $out = $before . "<link rel=\"stylesheet\" href=\"$match\">\n" . $after;
-                                }
-                            } else if ($fileExtension == 'js') {
-                                if (file_exists($match)) {
-                                    $out = $before . "<script src=\"$match\"></script>\n" . $after;
-                                }
-                            } else {
-                                $out = $before . $after;
-                            }
-                        }
-                    }
 
                     break;
             }
