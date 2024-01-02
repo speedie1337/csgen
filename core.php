@@ -91,7 +91,7 @@ function printCommentField($html, $id) {
             if ($line['usertype'] == 2) {
                 $html .= "\t\t\t\t\t\t<p><span class=\"commentAuthorMod\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
-                if ($line['username'] == $_SESSION['username'] || $_SESSION['usertype'] == 2) {
+                if ($line['username'] == $_SESSION['username'] || $_SESSION['type'] == 2) {
                     $html .= "<a href=\"/remove-comment.php?id=$cid\">Remove</a></p>\n";
                 }
 
@@ -99,7 +99,7 @@ function printCommentField($html, $id) {
             } else {
                 $html .= "\t\t\t\t\t\t<p><span class=\"commentAuthor\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
-                if ($line['username'] == $_SESSION['username'] || $_SESSION['usertype'] == 2) {
+                if ($line['username'] == $_SESSION['username'] || $_SESSION['type'] == 2) {
                     $html .= "<a href=\"/remove-comment.php?id=$cid\">Remove</a></p>\n";
                 }
 
