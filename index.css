@@ -182,6 +182,20 @@ input[type=file]::file-selector-button {
     padding-bottom: 100px;
 }
 
+.content li {
+    text-align: left;
+}
+
+.content table {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.content th, td {
+    padding-right: 25px;
+}
+
 .comment {
     margin: 5px;
     background-color: #262626;
