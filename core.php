@@ -264,13 +264,13 @@ function printHeader($html, $printpage) {
             $title = $ret->title;
             $description = $ret->description;
 
-	    if ($title === "") {
-	        $title = $instanceName;
-	    }
+        if ($title === "") {
+            $title = $instanceName;
+        }
 
-	    if ($description === "") {
-	        $description = $instanceDescription;
-	    }
+        if ($description === "") {
+            $description = $instanceDescription;
+        }
 
             $html .= "<!DOCTYPE html>\n";
             $html .= "<html>\n";
@@ -300,7 +300,7 @@ function printHeader($html, $printpage) {
             if ($endpointFound == 0) {
                 if (file_exists($Logo)) $html .= "\t\t\t<img src=\"/$Logo\" id=\"titleLogo\" class=\"title\" width=\"$logoHeaderSize\">\n";
 
-                $html .= "\t\t\t<small id='title'><a id='title' href=\"/\">$title</a></small>\n";
+                $html .= "\t\t\t<small id='title'><a id='title' href=\"/\">$instanceName</a></small>\n";
             }
 
             $html .= "\t\t</div>\n";
@@ -379,7 +379,7 @@ function printHeader($html, $printpage) {
                 }
             }
 
-	    break;
+        break;
         }
 
         $i++;
@@ -417,7 +417,7 @@ function printHeader($html, $printpage) {
         if ($endpointFound == 0) {
             if (file_exists($Logo)) $html .= "\t\t\t<img src=\"/$Logo\" id=\"titleLogo\" class=\"title\" width=\"$logoHeaderSize\">\n";
 
-            $html .= "\t\t\t<small id='title'><a id='title' href=\"/\">$title</a></small>\n";
+            $html .= "\t\t\t<small id='title'><a id='title' href=\"/\">$instanceName</a></small>\n";
         }
 
         $html .= "\t\t</div>\n";
@@ -490,7 +490,7 @@ function printHeader($html, $printpage) {
                     $Err = convertMarkdownToHTML(file_get_contents($err['file']));
 
                     $html .= "\t\t\t$Err->data\n";
-		    break;
+            break;
                 }
             }
 
