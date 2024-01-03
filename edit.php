@@ -81,7 +81,7 @@ $html .= "\t\t\t\t\t</span>\n";
 $html .= "\t\t\t\t</div>\n";
 
 if ($Action == "write") {
-    $defaultText = "@csgen:title: Unicorns & Lollipops\n@csgen:description: My description\n@csgen:date: 1970-01-01\n@csgen:allowComments: true\n\nHello world!";
+    $defaultText = "@csgen.title = \"Unicorns & Lollipops\";\n@csgen.description = \"My description\";\n@csgen.date = \"1970-01-01\";\n@csgen.allowComments = \"true\";\n\nHello world!";
     $defaultEndpoint = "";
 
     $DatabaseQuery = $Database->query('SELECT * FROM pages');
@@ -192,7 +192,7 @@ if ($Action == "write") {
         $html .= "\t\t\t\t\t\t<td class=\"pageID\" id=\"id-1-$Username\">$ID</td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"pageUser\">$Username</td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"pageDate\">$Date</td>\n";
-        $html .= "\t\t\t\t\t\t<td class=\"pageEndpoint\"><a href=\"/$Endpoint\">$Endpoint</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"pageEndpoint\"><a href=\"../$Endpoint\">$Endpoint</a></td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"pageFile\"><a href=\"$File\">$baseFile</a></td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"pageEdit\"><a href=\"/edit.php?id=$ID\">Edit</a></td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"pageRemove\"><a href=\"/remove.php?redir=edit&id=$ID\">Remove</a></td>\n";
