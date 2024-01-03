@@ -182,8 +182,9 @@ input[type=file]::file-selector-button {
     padding-bottom: 100px;
 }
 
-.content li {
-    text-align: left;
+.content ul {
+  padding-left: 0;
+  list-style-position: inside;
 }
 
 .content table {
