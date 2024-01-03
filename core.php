@@ -242,14 +242,22 @@ function convertMarkdownToHTML($contents) {
 function printHeader($html, $printpage) {
     include "config.php";
 
+    $id = -1;
+
+    if (isset($_REQUEST['id'])) {
+        $id = $_REQUEST['id'];
+    }
+
     $Database = createTables($sqlDB);
     $DatabaseQuery = $Database->query('SELECT * FROM pages');
 
     $wasFound = 0;
+    $i = 0;
+
     $subdir = isset($_GET['endpoint']) ? $_GET['endpoint'] : '/';
     while ($line = $DatabaseQuery->fetchArray()) {
         $endpoint = $line['endpoint'];
-        if ($endpoint == $subdir || "$endpoint/" == "$subdir") {
+        if ($endpoint == $subdir || "$endpoint/" == "$subdir" || $i == $id) {
             $wasFound = 1;
             $ret = convertMarkdownToHTML(file_get_contents($line['file']));
 
@@ -369,6 +377,8 @@ function printHeader($html, $printpage) {
                 }
             }
         }
+
+        $i++;
     }
 
     if ($wasFound != 1) {
