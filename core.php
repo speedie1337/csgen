@@ -121,77 +121,58 @@ function convertMarkdownToHTML($contents) {
 
     $ret = new parsedMarkdown();
     $parser = new MarkdownExtra;
-    $parser->no_markup = true;
-    $out = $contents;
+    $parser->no_markup = false;
 
     $specialSyntax = array(
-        '/@csgen:title:(.*?)(<|$)/',
-        '/@csgen:description:(.*?)(<|$)/',
-        '/@csgen:date:(.*?)(<|$)/',
-        '/@csgen:allowComments:(.*?)(<|$)/',
-        '/@csgen:displayTitle:(.*?)(<|$)/',
-        '/@csgen:displayDate:(.*?)(<|$)/',
+	'/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/',
+	'/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/',
+	'/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/',
+	'/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/',
+	'/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/',
+	'/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/',
     );
 
-    $out = $parser->transform($out);
-
-    preg_match_all("/\[\[(.*?)\]\]/", $out, $matches, PREG_PATTERN_ORDER);
-
-    for ($i = 0; $i < count($matches[0]); $i++) {
-        $fulllinktext = $matches[1][$i];
-        $linktitlesplit = explode('|', $fulllinktext);
-        $linkedp = $linktitlesplit[0];
-        $linkt = (count($linktitlesplit) > 1) ? $linktitlesplit[1] : $linkedp;
-        $pagept = explode('#', $linkedp)[0];
-        $linkedfn = getf(repsym($pagept));
-        $exists = file_exists($linkedfn);
-        $out = str_replace("[[$fulllinktext]]",
-            linkpage($linkedp, $linkt, ($exists? "" : " class=\"noexist\"")), $out);
-    }
-
-    $out = preg_replace("/\{\{(.*?)\}\}/", "<img src=\"" . BASE . "/$attachmentLocation/\\1\" alt=\"\\1\" />", $out);
-
-    preg_match_all("/<h([1-4])>(.*?)<\/h\\1>/", $out, $matches, PREG_PATTERN_ORDER);
+    $out = $parser->transform($contents);
 
     foreach ($specialSyntax as $pattern) {
         $matches = array();
 
         if (preg_match($pattern, $out, $matches)) {
             switch ($pattern) {
-                case '/@csgen:title:(.*?)(<|$)/':
+		case '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/':
                     $ret->title = $matches[1];
                     $ret->title = preg_replace('/<.*?$/', '', $ret->title);
-                    $out = removePrefix("@csgen:title:", $out);
+                    $out = removePrefix("@csgen\.title", $out);
 
                     break;
-                case '/@csgen:description:(.*?)(<|$)/':
+		case '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/':
                     $ret->description = $matches[1];
                     $ret->description = preg_replace('/<.*?$/', '', $ret->description);
-                    $out = removePrefix("@csgen:description:", $out);
+                    $out = removePrefix("@csgen\.description", $out);
 
                     break;
-                case '/@csgen:date:(.*?)(<|$)/':
+		case '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/':
                     $ret->date = $matches[1];
                     $ret->date = preg_replace('/<.*?$/', '', $ret->date);
-                    $out = removePrefix("@csgen:date:", $out);
+                    $out = removePrefix("@csgen\.date", $out);
 
                     break;
-                case '/@csgen:allowComments:(.*?)(<|$)/':
+		case '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/':
                     $ret->allowComments = $matches[1];
                     $ret->allowComments = preg_replace('/<.*?$/', '', $ret->allowComments);
-                    $out = removePrefix("@csgen:allowComments:", $out);
+                    $out = removePrefix("@csgen\.allowComments", $out);
 
                     break;
-                case '/@csgen:displayTitle:(.*?)(<|$)/':
+		case '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/':
                     $ret->displayTitle = $matches[1];
                     $ret->displayTitle = preg_replace('/<.*?$/', '', $ret->displayTitle);
-                    $out = removePrefix("@csgen:displayTitle:", $out);
+                    $out = removePrefix("@csgen\.displayTitle", $out);
 
                     break;
-                case '/@csgen:displayDate:(.*?)(<|$)/':
+		case '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/':
                     $ret->displayDate = $matches[1];
                     $ret->displayDate = preg_replace('/<.*?$/', '', $ret->displayDate);
-                    $out = removePrefix("@csgen:displayDate:", $out);
+                    $out = removePrefix("@csgen\.displayDate", $out);
 
                     break;
             }
