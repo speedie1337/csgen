@@ -58,7 +58,7 @@ function removePrefix($prefix, $html) {
     return preg_replace("/$prefix.*/", "", $html);
 }
 
-function printCommentField($html, $id) {
+function printCommentField($html, $id, $pageID) {
     include "config.php";
 
     $html .= "\t\t\t<div id=\"comment_section\" class=\"comment_section\">\n";
@@ -66,7 +66,7 @@ function printCommentField($html, $id) {
 
     if (isset($_SESSION['username'])) {
         $html .= "\t\t\t\t\t<p id=\"comment_p\" class=\"comment_p\">Have anything to say? Feel free to comment it below:</p>\n";
-        $html .= "\t\t\t\t\t<form class=\"commentWriteForm\" action=\"/comment.php?id=$id\" method=\"post\">\n";
+        $html .= "\t\t\t\t\t<form class=\"commentWriteForm\" action=\"/comment.php?id=$id&retid=$pageID\" method=\"post\">\n";
         $html .= "\t\t\t\t\t\t<br><textarea id=\"commentWriteArea\" class=\"commentWriteArea\" name=\"body\" rows=\"8\" cols=\"50\"></textarea>\n";
         $html .= "\t\t\t\t\t\t<br><br><input type=\"submit\" value=\"Comment\">\n";
         $html .= "\t\t\t\t\t\t<br><br>\n";
@@ -92,7 +92,7 @@ function printCommentField($html, $id) {
                 $html .= "\t\t\t\t\t\t<p style=\"text-align: left;\"><span class=\"commentAuthorMod\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
                 if ($line['username'] == $_SESSION['username'] || $_SESSION['type'] == 2) {
-                    $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid\">Remove</a></p>\n";
+                    $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
                 }
 
                 $html .= "\t\t\t\t\t\t</p>\n";
@@ -100,7 +100,7 @@ function printCommentField($html, $id) {
                 $html .= "\t\t\t\t\t\t<p style=\"text-align: left;\"><span class=\"commentAuthor\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
                 if ($line['username'] == $_SESSION['username'] || $_SESSION['type'] == 2) {
-                    $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid\">Remove</a></p>\n";
+                    $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
                 }
 
                 $html .= "\t\t\t\t\t\t</p>\n";
@@ -257,7 +257,7 @@ function printHeader($html, $printpage) {
     $subdir = isset($_GET['endpoint']) ? $_GET['endpoint'] : '/';
     while ($line = $DatabaseQuery->fetchArray()) {
         $endpoint = $line['endpoint'];
-        if ($endpoint == $subdir || "$endpoint/" == "$subdir" || $i == $id) {
+        if ((($endpoint == $subdir || "$endpoint/" == "$subdir") && $id == -1) || ($id != -1 && $i == $id)) {
             $wasFound = 1;
             $ret = convertMarkdownToHTML(file_get_contents($line['file']));
 
@@ -373,9 +373,11 @@ function printHeader($html, $printpage) {
                 $html .= "\t\t\t\t$ret->data\n";
 
                 if ($ret->allowComments == "true") {
-                    $html = printCommentField($html, $line['id']);
+                    $html = printCommentField($html, $line['id'], $i);
                 }
             }
+
+	    break;
         }
 
         $i++;
@@ -486,6 +488,7 @@ function printHeader($html, $printpage) {
                     $Err = convertMarkdownToHTML(file_get_contents($err['file']));
 
                     $html .= "\t\t\t$Err->data\n";
+		    break;
                 }
             }
 

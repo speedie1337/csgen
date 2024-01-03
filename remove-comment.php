@@ -3,6 +3,7 @@
 include "core.php";
 include "config.php";
 
+$retid = -1;
 $id = -1;
 
 $Redirect = "";
@@ -13,7 +14,7 @@ if (isset($_REQUEST['redir'])) {
 }
 
 if (isset($_REQUEST['id'])) {
-    $id = $_REQUEST['id'];
+    $id = htmlspecialchars($_REQUEST['id']);
 } else {
     if ($Redirect == "admin") {
         header("Location: admin.php?e=endpoint&action=comments");
@@ -26,6 +27,12 @@ if (isset($_REQUEST['id'])) {
     die();
 }
 
+if (isset($_REQUEST['retid'])) {
+    $retid = htmlspecialchars($_REQUEST['retid']);
+} else {
+    $retid = -1;
+}
+
 $Database = createTables($sqlDB);
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 
@@ -33,7 +40,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_S
     header('Location: login.php?redir=admin');
     die();
 } else if ($_SESSION['type'] != 2) { // not allowed
-    header('Location: /');
+    header("Location: /?id=$retid");
     die();
 }
 
@@ -59,7 +66,7 @@ $Username = $_SESSION['username'];
 
 // not authorized
 if ($AuthorizedCreation != 1) {
-    header('Location: /');
+    header("Location: /?id=$retid");
     die();
 }
 
@@ -70,7 +77,7 @@ if ($Redirect == "admin") {
 } else if ($Redirect == "edit") {
     header("Location: edit.php?action=comments");
 } else {
-    header("Location: /");
+    header("Location: /?id=$retid");
 }
 
 die();

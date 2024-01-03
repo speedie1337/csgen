@@ -7,6 +7,7 @@ $Date = "";
 $Endpoint = "";
 $File = "";
 $id = -1;
+$retid = -1;
 
 $Redirect = "";
 $AuthorizedCreation = 0;
@@ -77,6 +78,13 @@ if (isset($_REQUEST['id']) && htmlspecialchars($_REQUEST['id']) != "") {
     die();
 }
 
+if (isset($_REQUEST['retid']) && htmlspecialchars($_REQUEST['retid']) != "") {
+    $retid = htmlspecialchars($_REQUEST['retid']);
+} else {
+    $retid = -1;
+}
+
+
 // check if an endpoint by the same name already exists
 $idExists = 0;
 $DatabaseQuery = $Database->query('SELECT * FROM pages');
@@ -92,7 +100,7 @@ if ($idExists == 0) {
     } else if ($Redirect == "edit") {
         header("Location: edit.php?e=id&action=write");
     } else {
-        header("Location: /");
+        header("Location: /?id=$retid");
     }
 
     die();
@@ -106,7 +114,7 @@ while ($line = $DatabaseQuery->fetchArray()) {
         } else if ($Redirect == "edit") {
             header("Location: edit.php?e=dup&action=write");
         } else {
-            header("Location: /");
+            header("Location: /?id=$retid");
         }
 
         die();
@@ -120,7 +128,7 @@ if ($Redirect == "admin") {
 } else if ($Redirect == "edit") {
     header("Location: edit.php?action=write");
 } else {
-    header("Location: /");
+    header("Location: /?id=$retid");
 }
 
 die();
