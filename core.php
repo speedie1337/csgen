@@ -121,22 +121,22 @@ function convertMarkdownToHTML($contents) {
 
     $ret = new parsedMarkdown();
     $parser = new MarkdownExtra;
-    $parser->no_markup = false;
+    $parser->no_markup = true;
 
     $specialSyntax = array(
-    '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/',
-    '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/',
-    '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/',
-    '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/',
-    '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/',
-    '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/',
-    '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
-    '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
-    '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
-    '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
-    '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/',
-    '/.*@csgen\.div.*&lt;END.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/',
-    '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
+        '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
+        '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
+        '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
+        '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.div.*&lt;END.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
     );
 
     $out = $parser->transform($contents);
@@ -147,59 +147,60 @@ function convertMarkdownToHTML($contents) {
         if (preg_match($pattern, $out, $matches)) {
             switch ($pattern) {
                 case '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/':
-                        $ret->title = $matches[1];
-			$out = str_replace($matches[0], '', $out);
+                    $ret->title = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
 
-                        break;
+                    break;
                 case '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/':
-                        $ret->description = $matches[1];
-			$out = str_replace($matches[0], '', $out);
+                    $ret->description = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
 
-                        break;
+                    break;
                 case '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/':
-                        $ret->date = $matches[1];
-			$out = str_replace($matches[0], '', $out);
+                    $ret->date = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
 
-                        break;
+                    break;
                 case '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/':
-                        $ret->allowComments = $matches[1];
-			$out = str_replace($matches[0], '', $out);
+                    $ret->allowComments = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
 
-                        break;
+                    break;
                 case '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/':
-                        $ret->displayTitle = $matches[1];
-			$out = str_replace($matches[0], '', $out);
+                    $ret->displayTitle = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
 
-                        break;
+                    break;
                 case '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/':
-                        $ret->displayDate = $matches[1];
-			$out = str_replace($matches[0], '', $out);
+                    $ret->displayDate = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
 
-                        break;
+                    break;
                 case '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-			$out = str_replace($matches[0], "<span style=\"$matches[1]\">$matches[2]</span>", $out);
-                        break;
+                    $out = str_replace($matches[0], "<span style=\"$matches[1]\">$matches[2]</span>", $out);
+                    break;
                 case '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-			$out = str_replace($matches[0], "<span style=\"$matches[1]\">$matches[2]</span>", $out);
-                        break;
+                    $out = str_replace($matches[0], "<span style=\"$matches[1]\">$matches[2]</span>", $out);
+                    break;
                 case '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
-			$out = str_replace($matches[0], "<div class=\"$matches[1]\">", $out);
-                        break;
+                    $out = str_replace($matches[0], "<div class=\"$matches[1]\">", $out);
+                    break;
                 case '/.*@csgen\.div.*&lt;END.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
-			$out = str_replace($matches[0], "</div>", $out);
-                        break;
+                    $out = str_replace($matches[0], "</div>", $out);
+                    break;
                 case '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-			$out = str_replace($matches[0], "<style>\n.$matches[2] {\n\t$matches[1]\n}\n</style>", $out);
-                        break;
-		case '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
-			$out = str_replace($matches[0], "$matches[1]", $out);
-			break;
-		case '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-        		$imgres = array();
-			if (preg_match('/([0-9]*)x([0-9]*)/', $matches[1], $imgres)) {
-				$out = str_replace($matches[0], "<img width=\"$imgres[1]\" height=\"$imgres[2]\" src=\"$matches[2]\">", $out);
-			}
-			break;
+                    $out = str_replace($matches[0], "<style>\n.$matches[2] {\n\t$matches[1]\n}\n</style>", $out);
+                    break;
+                case '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
+                    $out = str_replace($matches[0], "$matches[1]", $out);
+                    break;
+                case '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
+                    $imgres = array();
+                    if (preg_match('/([0-9]*)x([0-9]*)/', $matches[1], $imgres)) {
+                        $out = str_replace($matches[0], "<img width=\"$imgres[1]\" height=\"$imgres[2]\" src=\"$matches[2]\">", $out);
+                    }
+
+                    break;
             }
         }
     }
