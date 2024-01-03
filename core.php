@@ -261,14 +261,16 @@ function printHeader($html, $printpage) {
             $wasFound = 1;
             $ret = convertMarkdownToHTML(file_get_contents($line['file']));
 
-            $title = $instanceName;
-            $description = $instanceDescription;
+            $title = $ret->title;
+            $description = $ret->description;
 
-            if ($ret->description != '') {
-                $description = $ret->description;
-            } else if ($ret->title != '') {
-                $title = $ret->title;
-            }
+	    if ($title === "") {
+	        $title = $instanceName;
+	    }
+
+	    if ($description === "") {
+	        $description = $instanceDescription;
+	    }
 
             $html .= "<!DOCTYPE html>\n";
             $html .= "<html>\n";
