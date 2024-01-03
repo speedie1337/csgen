@@ -133,10 +133,15 @@ function convertMarkdownToHTML($contents) {
         '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.inline.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.inline.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/',
         '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/',
         '/.*@csgen\.div.*&lt;END.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/',
         '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
+        '/.*@csgen\.include.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.include.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/',
+        '/.*@csgen\.include.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/',
     );
 
     $out = $parser->transform($contents);
@@ -194,10 +199,34 @@ function convertMarkdownToHTML($contents) {
                 case '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
                     $out = str_replace($matches[0], "$matches[1]", $out);
                     break;
+                case '/.*@csgen\.inline.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
+                    $out = str_replace($matches[0], "<style>$matches[1]</style>", $out);
+                    break;
+                case '/.*@csgen\.inline.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
+                    $out = str_replace($matches[0], "<script>$matches[1]</script>", $out);
+                    break;
                 case '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
                     $imgres = array();
                     if (preg_match('/([0-9]*)x([0-9]*)/', $matches[1], $imgres)) {
                         $out = str_replace($matches[0], "<img width=\"$imgres[1]\" height=\"$imgres[2]\" src=\"$matches[2]\">", $out);
+                    }
+
+                    break;
+                case '/.*@csgen\.include.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
+                    if (file_exists($matches[1])) {
+                        $out = str_replace($matches[0], file_get_contents($matches[1]), $out);
+                    }
+
+                    break;
+                case '/.*@csgen\.include.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
+                    if (file_exists($matches[1])) {
+                        $out = str_replace($matches[0], "<link rel=\"stylesheet\" href=\"$matches[1]\">", $out);
+                    }
+
+                    break;
+                case '/.*@csgen\.include.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
+                    if (file_exists($matches[1])) {
+                        $out = str_replace($matches[0], "<script src=\"$matches[1]\"></script>", $out);
                     }
 
                     break;

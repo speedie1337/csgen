@@ -47,15 +47,18 @@ Markdown document and it can be at any point.
 - `@csgen.displayTitle = true;`
 - `@csgen.displayDate = true;`
 - `@csgen.enableComments = true;`
-- `@csgen.includeInRSSFeed<FEED, BOOLEAN>("/rss.xml", true);`
-- `@csgen.includeInRSSFeed<FEED, INDEX, BOOLEAN>("/rss.xml", 1, true);`
 - `@csgen.span<STYLE, TEXT>("color: #0000ff;", "thisIsRedText");`
 - `@csgen.span<STYLE, HTML>("color: #0000ff;", "<p>thisIsARedHTMLTag</p>");`
 - `@csgen.inline<HTML>("<small>myHtmlHere</small>");`
+- `@csgen.inline<CSS>("h1 { color: #0000ff; }");`
+- `@csgen.inline<JAVASCRIPT>("alert('Hello world!');");`
 - `@csgen.image<SIZE, PATH>("1920x1080", "/attachments/image.png");`
 - `@csgen.div<START, NAME>("myFirstDiv");`
 - `@csgen.div<END, NAME>("myFirstDiv");`
 - `@csgen.div<STYLE, NAME>("text-align: left;", "myFirstDiv");`
+- `@csgen.include<HTML>("/attachments/index.html");`
+- `@csgen.include<CSS>("/attachments/index.css");`
+- `@csgen.include<JAVASCRIPT>("/attachments/index.js");`
 
 There are also special csgen reserved endpoints. These are:
 
