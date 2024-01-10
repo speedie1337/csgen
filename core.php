@@ -13,6 +13,7 @@ class parsedMarkdown {
     public $allowComments = false;
     public $displayTitle = false;
     public $displayDate = false;
+    public $displaySource = true;
 }
 
 function createTables($sqlDB) {
@@ -130,6 +131,7 @@ function convertMarkdownToHTML($contents) {
         '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
@@ -178,6 +180,11 @@ function convertMarkdownToHTML($contents) {
                     break;
                 case '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/':
                     $ret->displayDate = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
+
+                    break;
+                case '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/':
+                    $ret->displaySource = $matches[1];
                     $out = str_replace($matches[0], '', $out);
 
                     break;
@@ -365,6 +372,8 @@ function printHeader($html, $printpage) {
             $html .= "\t\t<div class=\"content\">\n";
 
             if ($printpage == 1) {
+                $sourceFile = $line['file'];
+
                 if ($ret->displayTitle == "true" && $ret->title != "") {
                     $html .= "\t\t\t<h1 id=\"header\">$ret->title</h1>\n";
                 }
@@ -373,6 +382,10 @@ function printHeader($html, $printpage) {
                 }
 
                 $html .= "\t\t\t\t$ret->data\n";
+
+                if ($ret->displaySource == "true") {
+                    $html .= "\t\t\t\t<a id=\"source\" href=\"$sourceFile\">Source</a>\n";
+                }
 
                 if ($ret->allowComments == "true") {
                     $html = printCommentField($html, $line['id'], $i);
