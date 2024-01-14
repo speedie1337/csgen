@@ -261,10 +261,13 @@ function printHeader($html, $printpage) {
     $wasFound = 0;
     $i = 0;
 
+    $title = $instanceName;
+    $description = $instanceDescription;
+
     $subdir = isset($_GET['endpoint']) ? $_GET['endpoint'] : '/';
     while ($line = $DatabaseQuery->fetchArray()) {
         $endpoint = $line['endpoint'];
-        if ((($endpoint == $subdir || "$endpoint/" == "$subdir") && $id == -1) || ($id != -1 && $i == $id)) {
+        if (((($endpoint == $subdir || "$endpoint/" == "$subdir") && $id == -1) || ($id != -1 && $i == $id)) && $printpage == 1) {
             $wasFound = 1;
             $ret = convertMarkdownToHTML(file_get_contents($line['file']));
 
