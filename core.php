@@ -8,12 +8,15 @@ error_reporting(-1);
 class parsedMarkdown {
     public $title = '';
     public $description = '';
+    public $favicon = '';
+    public $license = '';
     public $date = '';
     public $data = '';
     public $allowComments = false;
     public $displayTitle = false;
     public $displayDate = false;
     public $displaySource = true;
+    public $displayLicense = false;
 }
 
 function createTables($sqlDB) {
@@ -127,11 +130,14 @@ function convertMarkdownToHTML($contents) {
     $specialSyntax = array(
         '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.favicon.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.license.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
@@ -163,6 +169,16 @@ function convertMarkdownToHTML($contents) {
                     $out = str_replace($matches[0], '', $out);
 
                     break;
+                case '/.*@csgen\.favicon.*=.*&quot;(.*)(&quot;);/':
+                    $ret->favicon = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
+
+                    break;
+                case '/.*@csgen\.license.*=.*&quot;(.*)(&quot;);/':
+                    $ret->license = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
+
+                    break;
                 case '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/':
                     $ret->date = $matches[1];
                     $out = str_replace($matches[0], '', $out);
@@ -185,6 +201,11 @@ function convertMarkdownToHTML($contents) {
                     break;
                 case '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/':
                     $ret->displaySource = $matches[1];
+                    $out = str_replace($matches[0], '', $out);
+
+                    break;
+                case '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/':
+                    $ret->displayLicense = $matches[1];
                     $out = str_replace($matches[0], '', $out);
 
                     break;
@@ -273,14 +294,15 @@ function printHeader($html, $printpage) {
 
             $title = $ret->title;
             $description = $ret->description;
+            $favicon = $ret->favicon;
 
-        if ($title === "") {
-            $title = $instanceName;
-        }
+            if ($title === "") {
+                $title = $instanceName;
+            }
 
-        if ($description === "") {
-            $description = $instanceDescription;
-        }
+            if ($description === "") {
+                $description = $instanceDescription;
+            }
 
             $html .= "<!DOCTYPE html>\n";
             $html .= "<html>\n";
@@ -288,7 +310,11 @@ function printHeader($html, $printpage) {
             $html .= "\t\t<meta name=\"description\" content=\"$description\">\n";
             $html .= "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n";
 
-            if (file_exists($Icon)) $html .= "\t\t<link rel=\"icon\" href=\"/$Icon\" />\n";
+            if ($favicon != "") {
+                $html .= "\t\t<link rel=\"icon\" href=\"$favicon\"/>\n";
+            } else if (file_exists($Icon)) {
+                $html .= "\t\t<link rel=\"icon\" href=\"/$Icon\" />\n";
+            }
             if (file_exists($Stylesheet)) $html .= "\t\t<link type=\"text/css\" rel=\"stylesheet\" href=\"/$Stylesheet\"/>\n";
             if (file_exists($javaScript)) $html .= "\t\t<script src=\"/$javaScript\"></script>\n";
 
@@ -375,7 +401,9 @@ function printHeader($html, $printpage) {
             $html .= "\t\t<div class=\"content\">\n";
 
             if ($printpage == 1) {
+                $License = $ret->license;
                 $sourceFile = $line['file'];
+                $sourceFile = ltrim($sourceFile, $sourceFile[0]);
 
                 if ($ret->displayTitle == "true" && $ret->title != "") {
                     $html .= "\t\t\t<h1 id=\"header\">$ret->title</h1>\n";
@@ -388,6 +416,10 @@ function printHeader($html, $printpage) {
 
                 if ($ret->displaySource == "true") {
                     $html .= "\t\t\t\t<a id=\"source\" href=\"$sourceFile\">Source</a>\n";
+                }
+
+                if ($ret->displayLicense == "true") {
+                    $html .= "\t\t\t\tThis page is licensed under the $License license.";
                 }
 
                 if ($ret->allowComments == "true") {

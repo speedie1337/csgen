@@ -43,11 +43,14 @@ Markdown document and it can be at any point.
 
 - `@csgen.title = "myTitleHere";`
 - `@csgen.description = "myDescriptionHere";`
+- `@csgen.favicon = "myFaviconHere";`
 - `@csgen.date = "myDateHere";`
-- `@csgen.displayTitle = true;`
-- `@csgen.displayDate = true;`
-- `@csgen.displaySource = true;`
-- `@csgen.enableComments = true;`
+- `@csgen.license = "myLicenseHere";`
+- `@csgen.displayTitle = "true";`
+- `@csgen.displayDate = "true";`
+- `@csgen.displaySource = "true";`
+- `@csgen.displayLicense = "true";`
+- `@csgen.enableComments = "true";`
 - `@csgen.span<STYLE, TEXT>("color: #0000ff;", "thisIsRedText");`
 - `@csgen.span<STYLE, HTML>("color: #0000ff;", "<p>thisIsARedHTMLTag</p>");`
 - `@csgen.inline<HTML>("<small>myHtmlHere</small>");`
