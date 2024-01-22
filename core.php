@@ -315,6 +315,7 @@ function printHeader($html, $printpage) {
             } else if (file_exists($Icon)) {
                 $html .= "\t\t<link rel=\"icon\" href=\"/$Icon\" />\n";
             }
+
             if (file_exists($Stylesheet)) $html .= "\t\t<link type=\"text/css\" rel=\"stylesheet\" href=\"/$Stylesheet\"/>\n";
             if (file_exists($javaScript)) $html .= "\t\t<script src=\"/$javaScript\"></script>\n";
 
@@ -403,7 +404,6 @@ function printHeader($html, $printpage) {
             if ($printpage == 1) {
                 $License = $ret->license;
                 $sourceFile = $line['file'];
-                $sourceFile = ltrim($sourceFile, $sourceFile[0]);
 
                 if ($ret->displayTitle == "true" && $ret->title != "") {
                     $html .= "\t\t\t<h1 id=\"header\">$ret->title</h1>\n";
@@ -415,7 +415,7 @@ function printHeader($html, $printpage) {
                 $html .= "\t\t\t\t$ret->data\n";
 
                 if ($ret->displaySource == "true") {
-                    $html .= "\t\t\t\t<a id=\"source\" href=\"$sourceFile\">Source</a>\n";
+                    $html .= "\t\t\t\t<a id=\"source\" href=\"/$sourceFile\">Source</a>\n";
                 }
 
                 if ($ret->displayLicense == "true") {
