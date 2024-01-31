@@ -107,7 +107,7 @@ if ($Action == "write") {
     }
 
     $html .= "\t\t\t\t\t<label for=\"pageWriteArea\">Body</label><br>\n";
-    $html .= "\t\t\t\t\t<br><textarea id=\"pageWriteArea\" class=\"pageWriteArea\" name=\"body\" rows=\"8\" cols=\"50\">$defaultText</textarea>\n";
+    $html .= "\t\t\t\t\t<br><textarea id=\"pageWriteArea\" class=\"pageWriteArea\" name=\"body\" rows=\"32\" cols=\"200\">$defaultText</textarea>\n";
     $html .= "\t\t\t\t\t<br>\n";
     $html .= "\t\t\t\t\t<br><label for=\"endpoint\">Public location</label>\n";
 
