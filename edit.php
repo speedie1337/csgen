@@ -8,6 +8,7 @@ $Authorized = 0;
 $Primary = 0;
 $postID = -1;
 $Error = "";
+$History = "false";
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
     header('Location: login.php?redir=edit');
@@ -21,6 +22,12 @@ if (!isset($_REQUEST['action'])) {
     $Action = "write";
 } else {
     $Action = htmlspecialchars($_REQUEST['action']);
+}
+
+if (!isset($_REQUEST['history'])) {
+    $History = "false";
+} else {
+    $History = htmlspecialchars($_REQUEST['history']);
 }
 
 if (!isset($_REQUEST['id'])) {
@@ -60,21 +67,21 @@ $html .= "\t\t\t\t<div class=\"pageLinks\">\n";
 $html .= "\t\t\t\t\t<span id=\"pageSpan\" class=\"title\">\n";
 
 if ($Action == "write") {
-    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=write\" id='sel'>Write</a>\n";
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=write&id=$postID\" id='sel'>Write</a>\n";
 } else {
-    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=write\">Write</a>\n";
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=write&id=$postID\">Write</a>\n";
 }
 
 if ($Action == "attachments") {
-    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=attachments\" id='sel'>Attachments</a>\n";
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=attachments&id=$postID\" id='sel'>Attachments</a>\n";
 } else {
-    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=attachments\">Attachments</a>\n";
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=attachments&id=$postID\">Attachments</a>\n";
 }
 
 if ($Action == "articles") {
-    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=articles\" id='sel'>Articles</a>\n";
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=articles&id=$postID\" id='sel'>Articles</a>\n";
 } else {
-    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=articles\">Articles</a>\n";
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=articles&id=$postID\">Articles</a>\n";
 }
 
 $html .= "\t\t\t\t\t</span>\n";
@@ -95,6 +102,23 @@ if ($Action == "write") {
 
             $defaultEndpoint = $line['endpoint'];
             break;
+        }
+    }
+
+    if ($History == "true") {
+        $DatabaseQuery = $Database->query('SELECT * FROM history');
+        while ($line = $DatabaseQuery->fetchArray()) {
+            if ($line['id'] == $postID && $postID != -1) {
+                $theFile = $line['file'];
+
+                if (file_exists($theFile)) {
+                    $defaultText = file_get_contents($theFile);
+                }
+
+                $defaultEndpoint = $line['endpoint'];
+                $postID = $line['pageid'];
+                break;
+            }
         }
     }
 
@@ -120,13 +144,23 @@ if ($Action == "write") {
     $html .= "\t\t\t\t\t<br><input type=\"submit\" value=\"Save\"><br><br>\n";
     $html .= "\t\t\t\t</form>\n";
 
+    // add history button if we're editing an existing page
+    if ($defaultEndpoint != "") {
+        $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=history&id=$postID\">History</a>\n";
+    }
+
     // handle errors
     if ($Error == "endpoint") {
         $html .= "\t\t\t\t<p class=\"pageError\">You must specify a valid endpoint (e.g. /blog/article1)</p>\n";
     } else if ($Error == "file") {
         $html .= "\t\t\t\t<p class=\"pageError\">Failed to upload file.</p>\n";
+    } else if ($Error == "ofile") {
+        $html .= "\t\t\t\t<p class=\"pageError\">Failed to back up file, aborting.</p>\n";
     } else if ($Error == "exists") {
         $html .= "\t\t\t\t<p class=\"pageError\">A file with this endpoint already exists.</p>\n";
+    } else if ($Error == "saved") { // not actually an error but i don't want to make this too complicated
+        $Date = date($dateFormat) . " at " . date($timeFormat);
+        $html .= "\t\t\t\t<p class=\"pageSuccess\">$Date: Page at endpoint '$defaultEndpoint' saved.</p>\n";
     }
 } else if ($Action == "attachments") {
     $html .= "\t\t\t\t<form class=\"pageFileUploadForm\" action=\"/upload.php?redir=edit\" method=\"post\" enctype=\"multipart/form-data\">\n";
@@ -166,9 +200,45 @@ if ($Action == "write") {
         $html .= "\t\t\t\t<p class=\"pageError\">You must specify a valid endpoint (e.g. /blog/article1)</p>\n";
     } else if ($Error == "file") {
         $html .= "\t\t\t\t<p class=\"pageError\">Failed to upload file.</p>\n";
+    } else if ($Error == "ofile") {
+        $html .= "\t\t\t\t<p class=\"pageError\">Failed to back up file, aborting.</p>\n";
     } else if ($Error == "exists") {
         $html .= "\t\t\t\t<p class=\"pageError\">A file with this endpoint already exists.</p>\n";
     }
+} else if ($Action == "history") {
+    $html .= "\t\t\t\t<table class=\"historyUserView\">\n";
+    $html .= "\t\t\t\t\t<tr class=\"historyArticleView\">\n";
+    $html .= "\t\t\t\t\t\t<th class=\"historyUser\">User</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"historyDate\">Date</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"historyEndpoint\">Location</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"historyFile\">File</th>\n";
+    $html .= "\t\t\t\t\t</tr>\n";
+
+    $DatabaseQuery = $Database->query('SELECT * FROM history');
+    while ($line = $DatabaseQuery->fetchArray()) {
+        if ($line['pageid'] != $postID) {
+            continue;
+        }
+
+        $ID = $line['id'];
+        $Username = $line['username'];
+        $Date = $line['date'];
+        $Endpoint = $line['endpoint'];
+        $File = $line['file'];
+        $baseFile = basename($File);
+
+        $html .= "\t\t\t\t\t<tr class=\"historyArticleView\">\n";
+        $html .= "\t\t\t\t\t\t<td class=\"historyUser\">$Username</td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"historyDate\">$Date</td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"historyEndpoint\"><a href=\"../$Endpoint\">$Endpoint</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"historyFile\"><a href=\"$File\">$baseFile</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"historyRestore\"><a href=\"/edit.php?id=$ID&history=true\">Restore</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"historyRemove\"><a href=\"/remove.php?redir=edit&id=$ID&history=true\">Remove</a></td>\n";
+
+        $html .= "\t\t\t\t\t</tr>\n";
+    }
+
+    $html .= "\t\t\t\t</table>\n";
 } else if ($Action == "articles") {
     $html .= "\t\t\t\t<table class=\"pageUserView\">\n";
     $html .= "\t\t\t\t\t<tr class=\"pageArticleView\">\n";
@@ -207,6 +277,8 @@ if ($Action == "write") {
         $html .= "\t\t\t\t<p class=\"pageError\">You must specify a valid endpoint (e.g. /blog/article1)</p>\n";
     } else if ($Error == "file") {
         $html .= "\t\t\t\t<p class=\"pageError\">Failed to upload file.</p>\n";
+    } else if ($Error == "ofile") {
+        $html .= "\t\t\t\t<p class=\"pageError\">Failed to back up file, aborting.</p>\n";
     } else if ($Error == "exists") {
         $html .= "\t\t\t\t<p class=\"pageError\">A file with this endpoint already exists.</p>\n";
     }

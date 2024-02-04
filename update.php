@@ -8,6 +8,8 @@ $Endpoint = "";
 $File = "";
 $id = -1;
 
+$noHist = false;
+
 $Redirect = "";
 $AuthorizedCreation = 0;
 
@@ -85,6 +87,8 @@ while ($line = $DatabaseQuery->fetchArray()) {
     }
 }
 
+$OldFile = "";
+
 if (isset($_REQUEST['body']) && htmlspecialchars($_REQUEST['body']) != "") {
     $Body = htmlspecialchars($_REQUEST['body']);
 
@@ -93,6 +97,31 @@ if (isset($_REQUEST['body']) && htmlspecialchars($_REQUEST['body']) != "") {
         die();
     }
 
+    // back up the old file first
+    $OldFileContents = file_get_contents($File);
+    $Hash = hash('sha256', $OldFileContents);
+    $OldFile = "$historyLocation/$Hash/$Hash.md";
+
+    if (file_exists($OldFile)) {
+        $noHist = true;
+    } else {
+        if (!is_dir("$historyLocation/$Hash")) {
+            mkdir("$historyLocation/$Hash", 0777, true);
+        }
+        if (!file_put_contents($OldFile, $OldFileContents)) {
+            if ($Redirect == "admin") {
+                header("Location: admin.php?e=ofile");
+            } else if ($Redirect == "edit") {
+                header("Location: edit.php?e=ofile&action=articles");
+            } else {
+                header("Location: /");
+            }
+
+            die();
+        }
+    }
+
+    // now write to the new file
     if (!file_put_contents($File, $Body)) {
         if ($Redirect == "admin") {
             header("Location: admin.php?e=file");
@@ -119,10 +148,14 @@ if (isset($_REQUEST['body']) && htmlspecialchars($_REQUEST['body']) != "") {
 $Database->exec("UPDATE pages SET date='$Date' WHERE id='$id'");
 $Database->exec("UPDATE pages SET endpoint='$Endpoint' WHERE id='$id'");
 
+if ($noHist == false) {
+    $Database->exec("INSERT INTO history(username, pageid, date, endpoint, file) VALUES('$Username', '$id', '$Date', '$Endpoint', '$OldFile')");
+}
+
 if ($Redirect == "admin") {
     header("Location: admin.php?action=users");
 } else if ($Redirect == "edit") {
-    header("Location: edit.php?action=articles");
+    header("Location: edit.php?action=write&id=$id&e=saved");
 } else {
     header("Location: /");
 }

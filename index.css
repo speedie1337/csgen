@@ -168,6 +168,10 @@ input[type=file]::file-selector-button {
     color: #ff0000;
 }
 
+.pageSuccess {
+    color: #00ff51;
+}
+
 .content {
     font-size: 12pt;
     font-family: Noto Sans;

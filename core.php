@@ -55,6 +55,25 @@ function createTables($sqlDB) {
      */
     $Database->exec("CREATE TABLE IF NOT EXISTS pages(id INTEGER PRIMARY KEY, username TEXT, date TEXT, endpoint TEXT, file TEXT)");
 
+    /* modified table
+     * id (INTEGER PRIMARY KEY)
+     * pageid (INT)
+     * author (TEXT)
+     * endpoint (TEXT)
+     * file (TEXT)
+     */
+    $Database->exec("CREATE TABLE IF NOT EXISTS modified(id INTEGER PRIMARY KEY, pageid INT, author TEXT, endpoint TEXT, file TEXT)");
+
+    /* history table
+     * id (INTEGER PRIMARY KEY)
+     * pageid (INT)
+     * username (TEXT)
+     * date (TEXT)
+     * endpoint (TEXT)
+     * file (TEXT)
+     */
+    $Database->exec("CREATE TABLE IF NOT EXISTS history(id INTEGER PRIMARY KEY, pageid INT, username TEXT, date TEXT, endpoint TEXT, file TEXT)");
+
     return $Database;
 }
 
@@ -595,6 +614,8 @@ function checkIfAdminExists() {
 
     if (!is_dir($documentLocation)) mkdir($documentLocation, 0777, true);
     if (!is_dir($attachmentLocation)) mkdir($attachmentLocation, 0777, true);
+    if (!is_dir($historyLocation)) mkdir($historyLocation, 0777, true);
+    if (!is_dir($modifiedLocation)) mkdir($modifiedLocation, 0777, true);
 
     $adminExists = 0;
     while ($line = $DatabaseQuery->fetchArray()) {
