@@ -375,7 +375,8 @@ function printHeader($html, $printpage) {
             }
 
             if (isset($_SESSION['type']) && $_SESSION['type'] == 2) {
-                $html .= "\t\t\t\t<a id='edit' href=\"/edit.php\">Edit</a>\n";
+                $pid = $i + 1;
+                $html .= "\t\t\t\t<a id='edit' href=\"/edit.php?id=$pid\">Edit</a>\n";
             }
 
             if (!isset($_SESSION['type'])) {
