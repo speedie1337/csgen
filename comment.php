@@ -84,6 +84,11 @@ if (isset($_REQUEST['retid']) && htmlspecialchars($_REQUEST['retid']) != "") {
     $retid = -1;
 }
 
+// check to make sure it fits in the size boundries
+if (mb_strlen($Body, "UTF-8") > $maxCommentSize) {
+    header("Location: /?id=$retid");
+    die();
+}
 
 // check if an endpoint by the same name already exists
 $idExists = 0;
