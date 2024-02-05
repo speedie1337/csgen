@@ -26,14 +26,14 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_S
 
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 while ($line = $DatabaseQuery->fetchArray()) {
-    if ($line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password'] && $line['usertype'] == $_SESSION['type']) {
+    if ($line['username'] == htmlspecialchars($_SESSION['username']) && htmlspecialchars($_SESSION['username']) != "" && $line['password'] == htmlspecialchars($_SESSION['password']) && $line['usertype'] == htmlspecialchars($_SESSION['type'])) {
         $AuthorizedCreation = 1;
         break;
     }
 }
 
-$Username = $_SESSION['username'];
-$userType = $_SESSION['type'];
+$Username = htmlspecialchars($_SESSION['username']);
+$userType = htmlspecialchars($_SESSION['type']);
 
 // not authorized
 if ($AuthorizedCreation != 1) {

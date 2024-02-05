@@ -20,7 +20,7 @@ if (isset($_REQUEST['logout']) && htmlspecialchars($_REQUEST['logout']) == "true
 
 // if a session exists, redirect the user there instead
 if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
-    if ($Redirect == "index" || ($Redirect == "admin" && $_SESSION['type'] != 2) || $Redirect == "") {
+    if ($Redirect == "index" || ($Redirect == "admin" && htmlspecialchars($_SESSION['type']) != 2) || $Redirect == "") {
         header('Location: /');
         die();
     } else if ($Redirect == "admin") {

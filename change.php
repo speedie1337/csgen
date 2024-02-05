@@ -21,8 +21,8 @@ if (isset($_REQUEST['redir'])) {
 
 // make sure a username and password is specified for authentication
 if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
-    $Username = $_SESSION['username'];
-    $Password = $_SESSION['password'];
+    $Username = htmlspecialchars($_SESSION['username']);
+    $Password = htmlspecialchars($_SESSION['password']);
 } else {
     if ($Redirect == "account") {
         header("Location: account.php?id=$ID&e=auth");

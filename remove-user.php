@@ -6,7 +6,7 @@ include "core.php";
 if (!isset($_SESSION['username']) ||  !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
     header('Location: login.php?redir=admin');
     die();
-} else if ($_SESSION['type'] != 2) { // not allowed
+} else if (htmlspecialchars($_SESSION['type']) != 2) { // not allowed
     header('Location: /');
     die();
 }
@@ -41,7 +41,7 @@ $Database = createTables($sqlDB);
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 
 while ($line = $DatabaseQuery->fetchArray()) {
-    if ($line['usertype'] == 2 && $line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password'] && $_SESSION['password'] != "") {
+    if ($line['usertype'] == 2 && $line['username'] == htmlspecialchars($_SESSION['username']) && htmlspecialchars($_SESSION['username']) != "" && $line['password'] == htmlspecialchars($_SESSION['password']) && htmlspecialchars($_SESSION['password']) != "") {
         $AuthorizedRemoval = 1;
         $AdminIsPrimary = $line['primaryadmin'];
         break;

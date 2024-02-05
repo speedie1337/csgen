@@ -116,7 +116,7 @@ function printCommentField($html, $id, $pageID) {
             if ($line['usertype'] == 2) {
                 $html .= "\t\t\t\t\t\t<p style=\"text-align: left;\"><span class=\"commentAuthorMod\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
-                if ($line['username'] == $_SESSION['username'] || $_SESSION['type'] == 2) {
+                if ($line['username'] == htmlspecialchars($_SESSION['username']) || htmlspecialchars($_SESSION['type']) == 2) {
                     $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
                 }
 
@@ -124,7 +124,7 @@ function printCommentField($html, $id, $pageID) {
             } else {
                 $html .= "\t\t\t\t\t\t<p style=\"text-align: left;\"><span class=\"commentAuthor\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
-                if ($line['username'] == $_SESSION['username'] || $_SESSION['type'] == 2) {
+                if ($line['username'] == htmlspecialchars($_SESSION['username']) || htmlspecialchars($_SESSION['type']) == 2) {
                     $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
                 }
 
@@ -294,7 +294,7 @@ function printHeader($html, $printpage) {
     $id = -1;
 
     if (isset($_REQUEST['id'])) {
-        $id = $_REQUEST['id'];
+        $id = htmlspecialchars($_REQUEST['id']);
     }
 
     $Database = createTables($sqlDB);
@@ -407,7 +407,7 @@ function printHeader($html, $printpage) {
 
                 $html .= "\t\t\t\t<a id='login' href=\"/login.php\">Log in</a>\n";
             } else {
-                $Username = $_SESSION['username'];
+                $Username = htmlspecialchars($_SESSION['username']);
                 $html .= "\t\t\t\t<a id='username' href=\"/account.php\">$Username</a>\n";
                 $html .= "\t\t\t\t<a id='logout' href=\"/login.php?logout=true\">Log out</a>\n";
             }
@@ -541,7 +541,7 @@ function printHeader($html, $printpage) {
 
             $html .= "\t\t\t\t<a id='login' href=\"/login.php\">Log in</a>\n";
         } else {
-            $Username = $_SESSION['username'];
+            $Username = htmlspecialchars($_SESSION['username']);
             $html .= "\t\t\t\t<a id='username' href=\"/account.php\">$Username</a>\n";
             $html .= "\t\t\t\t<a id='logout' href=\"/login.php?logout=true\">Log out</a>\n";
         }

@@ -16,7 +16,7 @@ if (isset($_REQUEST['redir'])) {
 }
 
 if (isset($_REQUEST['id'])) {
-    $id = $_REQUEST['id'];
+    $id = htmlspecialchars($_REQUEST['id']);
 } else {
     header("Location: /");
     die();
@@ -32,20 +32,20 @@ $DatabaseQuery = $Database->query('SELECT * FROM users');
 if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
     header('Location: login.php?redir=admin');
     die();
-} else if ($_SESSION['type'] != 2) { // not allowed
+} else if (htmlspecialchars($_SESSION['type']) != 2) { // not allowed
     header('Location: /');
     die();
 }
 
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 while ($line = $DatabaseQuery->fetchArray()) {
-    if ($line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password']) {
+    if ($line['username'] == htmlspecialchars($_SESSION['username']) && htmlspecialchars($_SESSION['username']) != "" && $line['password'] == htmlspecialchars($_SESSION['password'])) {
         $Authorized = 1;
         break;
     }
 }
 
-$Username = $_SESSION['username'];
+$Username = htmlspecialchars($_SESSION['username']);
 
 // not authorized
 if ($Authorized != 1) {

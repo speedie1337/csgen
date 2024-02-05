@@ -16,8 +16,8 @@ $Redirect = "account";
 
 // make sure a username and password is specified for authentication
 if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
-    $Username = $_SESSION['username'];
-    $Password = $_SESSION['password'];
+    $Username = htmlspecialchars($_SESSION['username']);
+    $Password = htmlspecialchars($_SESSION['password']);
 } else {
     print "Username and password must be specified.";
     die();

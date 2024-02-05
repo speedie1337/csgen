@@ -43,14 +43,14 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_S
 
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 while ($line = $DatabaseQuery->fetchArray()) {
-    if ($line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password']) {
+    if ($line['username'] == htmlspecialchars($_SESSION['username']) && htmlspecialchars($_SESSION['username']) != "" && $line['password'] == htmlspecialchars($_SESSION['password'])) {
         if ($line['usertype'] == 2) {
             $Authorized = 1;
         } else {
             $CommentDatabaseQuery = $Database->query('SELECT * FROM comments');
 
             while ($cline = $CommentDatabaseQuery->fetchArray()) {
-                if ($cline['id'] == $id && $cline['username'] == $_SESSION['username']) {
+                if ($cline['id'] == $id && $cline['username'] == htmlspecialchars($_SESSION['username'])) {
                     $Authorized = 1;
                 }
             }
@@ -60,7 +60,7 @@ while ($line = $DatabaseQuery->fetchArray()) {
     }
 }
 
-$Username = $_SESSION['username'];
+$Username = htmlspecialchars($_SESSION['username']);
 
 // not authorized
 if ($Authorized != 1) {
