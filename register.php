@@ -77,7 +77,7 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
         session_unset();
         session_destroy();
 
-        $html .= "\t\t\t\t<p class=\"error\">Calm down. You've created too many accounts.'</p>\n";
+        $html .= "\t\t\t\t<p class=\"error\">Calm down. You've created too many accounts.</p>\n";
     }
 
     $html = printFooter($html);
