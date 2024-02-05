@@ -7,7 +7,7 @@ $retid = -1;
 $id = -1;
 
 $Redirect = "";
-$AuthorizedCreation = 0;
+$Authorized = 0;
 
 if (isset($_REQUEST['redir'])) {
     $Redirect = htmlspecialchars($_REQUEST['redir']);
@@ -46,26 +46,27 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_S
 
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 while ($line = $DatabaseQuery->fetchArray()) {
-    if ($line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password'] && $line['usertype'] == 2) {
-        $AuthorizedCreation = 1;
-        break;
-    } else if ($line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password']) {
-        $CommentDatabaseQuery = $Database->query('SELECT * FROM comments');
+    if ($line['username'] == $_SESSION['username'] && $_SESSION['username'] != "" && $line['password'] == $_SESSION['password']) {
+        if ($line['usertype'] == 2) {
+            $Authorized = 1;
+        } else {
+            $CommentDatabaseQuery = $Database->query('SELECT * FROM comments');
 
-        while ($cline = $CommentDatabaseQuery->fetchArray()) {
-            if ($line['id'] == $id && $line['username'] == $_SESSION['username']) {
-                $AuthorizedCreation = 1;
+            while ($cline = $CommentDatabaseQuery->fetchArray()) {
+                if ($cline['id'] == $id && $cline['username'] == $_SESSION['username']) {
+                    $Authorized = 1;
+                }
             }
-        }
 
-        break;
+            break;
+        }
     }
 }
 
 $Username = $_SESSION['username'];
 
 // not authorized
-if ($AuthorizedCreation != 1) {
+if ($Authorized != 1) {
     header("Location: /?id=$retid");
     die();
 }
