@@ -16,20 +16,33 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
         die();
     }
 
+    if ($storeAgent || $storeAgent == "true") $userAgent = getUserAgent();
+    if ($storeCreated || $storeCreated == "true") $Created = date($dateFormat);
+    if ($storeLastUsage || $storeLastUsage == "true") $lastUsed = date($dateFormat);
+    if ($storeIP || $storeIP == "true") $ip = getIPAddress();
+
     // check if a user by the same name already exists
+    $ipAddresses = 0;
     $Database = createTables($sqlDB);
     $DatabaseQuery = $Database->query('SELECT * FROM users');
     while ($line = $DatabaseQuery->fetchArray()) {
+        if ($storeIP || $storeIP == "true") {
+            if ($line['ip'] == $ip) {
+                $ipAddresses++;
+            }
+        }
         if ($line['username'] == "$Username" && $Username != "" && $line['username'] != "") {
             header("Location: register.php?e=exists");
             die();
         }
     }
 
-    if ($storeAgent || $storeAgent == "true") $userAgent = getUserAgent();
-    if ($storeCreated || $storeCreated == "true") $Created = date($dateFormat);
-    if ($storeLastUsage || $storeLastUsage == "true") $lastUsed = date($dateFormat);
-    if ($storeIP || $storeIP == "true") $ip = getIPAddress();
+    if ($storeIP || $storeIP == "true") {
+        if ($ipAddresses > $maxAccountsPerIP) {
+            header("Location: register.php?e=limit");
+            die();
+        }
+    }
 
     $Database->exec("INSERT INTO users(username, password, usertype, primaryadmin, numberofcomments, lastused, created, ip, useragent) VALUES('$Username', '$Password', '1', '0', '0', '$lastUsed', '$Created', '$ip', '$userAgent')");
 

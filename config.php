@@ -22,6 +22,7 @@ $attachmentLocation      = "attachments/";
 $requestLocation         = "requests/";
 $historyLocation         = "history/";
 $maxCommentSize          = 1024;
+$maxAccountsPerIP        = 4;
 
 $configFile = "";
 
@@ -62,4 +63,5 @@ if (isset($configEntries['allow_change_password'])) $allowPasswordChange = $conf
 if (isset($configEntries['public_account_create'])) $publicAccountCreation = $configEntries['public_account_create'];
 if (isset($configEntries['javascript'])) $javaScript = $configEntries['javascript'];
 if (isset($configEntries['max_comment_size'])) $maxCommentSize = $configEntries['max_comment_size'];
+if (isset($configEntries['max_accounts_per_ip'])) $maxAccountsPerIP = $configEntries['max_accounts_per_ip'];
 ?>
