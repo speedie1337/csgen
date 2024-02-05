@@ -20,7 +20,7 @@ $instanceDescription     = "This is a csgen instance.";
 $footerText              = "Licensed under the GNU Affero General Public License version 3.0.<br><br>Made in Sweden";
 $documentLocation        = "documents/";
 $attachmentLocation      = "attachments/";
-$modifiedLocation        = "modified/";
+$requestLocation        = "requests/";
 $historyLocation         = "history/";
 
 $configFile = "";
@@ -54,7 +54,7 @@ $instanceName = $configEntries['instance_name'];
 $instanceDescription = $configEntries['instance_description'];
 $documentLocation = $configEntries['document_location'];
 $attachmentLocation = $configEntries['attachment_location'];
-$modifiedLocation = $configEntries['modified_location'];
+$requestLocation = $configEntries['request_location'];
 $historyLocation = $configEntries['history_location'];
 $footerText = $configEntries['footer_text'];
 $allowUsernameChange = $configEntries['allow_change_username'];

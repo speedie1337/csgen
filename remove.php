@@ -5,6 +5,7 @@ include "config.php";
 $id = -1;
 
 $History = "false";
+$Request = "false";
 $Redirect = "";
 $AuthorizedCreation = 0;
 
@@ -14,6 +15,9 @@ if (isset($_REQUEST['redir'])) {
 
 if (isset($_REQUEST['history'])) {
     $History = htmlspecialchars($_REQUEST['history']);
+}
+if (isset($_REQUEST['request'])) {
+    $Request = htmlspecialchars($_REQUEST['request']);
 }
 
 if (isset($_REQUEST['id'])) {
@@ -57,7 +61,7 @@ if ($AuthorizedCreation != 1) {
     die();
 }
 
-if ($History == "false") {
+if ($History == "false" && $Request == "false") {
     $DatabaseQuery = $Database->query('SELECT * FROM pages');
     while ($line = $DatabaseQuery->fetchArray()) {
         if ($line['id'] == $id && $id != -1) {
@@ -74,10 +78,72 @@ if ($History == "false") {
 
             $Database->exec("DELETE FROM pages WHERE id='$id'");
 
+            // also delete requests
+            $ModDatabaseQuery = $Database->query('SELECT * FROM requests');
+            while ($mline = $ModDatabaseQuery->fetchArray()) {
+                if ($mline['pageid'] == $id && $id != -1) {
+                    $File = $mline['file'];
+                    $Directory = dirname($File);
+
+                    if (is_file($File)) {
+                        unlink($File);
+
+                        if (is_dir($Directory)) {
+                            rmdir($Directory);
+                        }
+                    }
+
+                    $Database->exec("DELETE FROM requests WHERE pageid='$id'");
+
+                    break;
+                }
+            }
+
+            // also delete history
+            $HistDatabaseQuery = $Database->query('SELECT * FROM history');
+            while ($hline = $HistDatabaseQuery->fetchArray()) {
+                if ($hline['pageid'] == $id && $id != -1) {
+                    $File = $hline['file'];
+                    $Directory = dirname($File);
+
+                    if (is_file($File)) {
+                        unlink($File);
+
+                        if (is_dir($Directory)) {
+                            rmdir($Directory);
+                        }
+                    }
+
+                    $Database->exec("DELETE FROM history WHERE pageid='$id'");
+
+                    break;
+                }
+            }
+
             break;
         }
     }
-} else {
+} else if ($Request == "true") {
+    $DatabaseQuery = $Database->query('SELECT * FROM requests');
+    while ($line = $DatabaseQuery->fetchArray()) {
+        if ($line['id'] == $id && $id != -1) {
+            $File = $line['file'];
+            $Directory = dirname($File);
+
+            if (is_file($File)) {
+                unlink($File);
+
+                if (is_dir($Directory)) {
+                    rmdir($Directory);
+                }
+            }
+
+            $Database->exec("DELETE FROM requests WHERE id='$id'");
+
+            break;
+        }
+    }
+} else if ($History == "true") {
     $DatabaseQuery = $Database->query('SELECT * FROM history');
     while ($line = $DatabaseQuery->fetchArray()) {
         if ($line['id'] == $id && $id != -1) {
@@ -104,6 +170,8 @@ if ($Redirect == "admin") {
 } else if ($Redirect == "edit") {
     if ($History == "true") {
         header("Location: edit.php?action=history&id=$id");
+    } else if ($Request == "true") {
+        header("Location: edit.php?action=requests&id=$id");
     } else {
         header("Location: edit.php?action=articles");
     }

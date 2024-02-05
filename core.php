@@ -55,14 +55,16 @@ function createTables($sqlDB) {
      */
     $Database->exec("CREATE TABLE IF NOT EXISTS pages(id INTEGER PRIMARY KEY, username TEXT, date TEXT, endpoint TEXT, file TEXT)");
 
-    /* modified table
+    /* requests table
      * id (INTEGER PRIMARY KEY)
      * pageid (INT)
-     * author (TEXT)
+     * username (TEXT)
+     * date (TEXT)
+     * message (TEXT)
      * endpoint (TEXT)
      * file (TEXT)
      */
-    $Database->exec("CREATE TABLE IF NOT EXISTS modified(id INTEGER PRIMARY KEY, pageid INT, author TEXT, endpoint TEXT, file TEXT)");
+    $Database->exec("CREATE TABLE IF NOT EXISTS requests(id INTEGER PRIMARY KEY, pageid INT, username TEXT, date TEXT, message TEXT, endpoint TEXT, file TEXT)");
 
     /* history table
      * id (INTEGER PRIMARY KEY)
@@ -438,6 +440,9 @@ function printHeader($html, $printpage) {
                     $html .= "\t\t\t\t<a id=\"source\" href=\"/$sourceFile\">Source</a>\n";
                 }
 
+                $pid = $i + 1;
+                $html .= "\t\t\t\t<a id=\"modify\" href=\"/edit-page.php?id=$pid\">Request changes</a>\n";
+
                 if ($ret->displayLicense == "true") {
                     $html .= "\t\t\t\tThis page is licensed under the $License license.";
                 }
@@ -615,7 +620,7 @@ function checkIfAdminExists() {
     if (!is_dir($documentLocation)) mkdir($documentLocation, 0777, true);
     if (!is_dir($attachmentLocation)) mkdir($attachmentLocation, 0777, true);
     if (!is_dir($historyLocation)) mkdir($historyLocation, 0777, true);
-    if (!is_dir($modifiedLocation)) mkdir($modifiedLocation, 0777, true);
+    if (!is_dir($requestLocation)) mkdir($requestLocation, 0777, true);
 
     $adminExists = 0;
     while ($line = $DatabaseQuery->fetchArray()) {
@@ -640,6 +645,17 @@ function getIPAddress() {
 
 function getUserAgent() {
     return $_SERVER['HTTP_USER_AGENT'];
+}
+
+function truncateText($text, $chars) {
+    if (strlen($text) <= $chars) {
+        return $text;
+    }
+    $text = $text." ";
+    $text = substr($text,0,$chars);
+    $text = substr($text,0,strrpos($text,' '));
+    $text = $text."...";
+    return $text;
 }
 
 function generatePassword($pwd) {

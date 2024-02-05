@@ -9,12 +9,16 @@ $File = "";
 $id = -1;
 
 $noHist = false;
+$Request = "false";
 
 $Redirect = "";
 $AuthorizedCreation = 0;
 
 if (isset($_REQUEST['redir'])) {
     $Redirect = htmlspecialchars($_REQUEST['redir']);
+}
+if (isset($_REQUEST['request'])) {
+    $Request = htmlspecialchars($_REQUEST['request']);
 }
 
 if (isset($_REQUEST['id'])) {
@@ -132,6 +136,29 @@ if (isset($_REQUEST['body']) && htmlspecialchars($_REQUEST['body']) != "") {
         }
 
         die();
+    }
+
+    // also delete requests
+    if ($Request == "true") {
+        $ModDatabaseQuery = $Database->query('SELECT * FROM requests');
+        while ($mline = $ModDatabaseQuery->fetchArray()) {
+            if ($mline['pageid'] == $id && $id != -1) {
+                $File = $mline['file'];
+                $Directory = dirname($File);
+
+                if (is_file($File)) {
+                    unlink($File);
+
+                    if (is_dir($Directory)) {
+                        rmdir($Directory);
+                    }
+                }
+
+                $Database->exec("DELETE FROM requests WHERE pageid='$id'");
+
+                break;
+            }
+        }
     }
 } else {
     if ($Redirect == "admin") {

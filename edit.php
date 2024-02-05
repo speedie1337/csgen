@@ -9,6 +9,7 @@ $Primary = 0;
 $postID = -1;
 $Error = "";
 $History = "false";
+$Request = "false";
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
     header('Location: login.php?redir=edit');
@@ -28,6 +29,12 @@ if (!isset($_REQUEST['history'])) {
     $History = "false";
 } else {
     $History = htmlspecialchars($_REQUEST['history']);
+}
+
+if (!isset($_REQUEST['request'])) {
+    $Request = "false";
+} else {
+    $Request = htmlspecialchars($_REQUEST['request']);
 }
 
 if (!isset($_REQUEST['id'])) {
@@ -84,6 +91,12 @@ if ($Action == "articles") {
     $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=articles&id=$postID\">Articles</a>\n";
 }
 
+if ($Action == "requests") {
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=requests&id=$postID\" id='sel'>Requests</a>\n";
+} else {
+    $html .= "\t\t\t\t\t\t<a href=\"/edit.php?action=requests&id=$postID\">Requests</a>\n";
+}
+
 $html .= "\t\t\t\t\t</span>\n";
 $html .= "\t\t\t\t</div>\n";
 
@@ -122,12 +135,33 @@ if ($Action == "write") {
         }
     }
 
+    if ($Request == "true") {
+        $DatabaseQuery = $Database->query('SELECT * FROM requests');
+        while ($line = $DatabaseQuery->fetchArray()) {
+            if ($line['id'] == $postID && $postID != -1) {
+                $theFile = $line['file'];
+
+                if (file_exists($theFile)) {
+                    $defaultText = file_get_contents($theFile);
+                }
+
+                $defaultEndpoint = $line['endpoint'];
+                $postID = $line['pageid'];
+                break;
+            }
+        }
+    }
+
     $html .= "\t\t\t\t<p class=\"pageWarning\"><strong>Warning: Switching tab will delete changes made to the Markdown document. Press 'Save' to avoid this.</strong></p>\n";
 
     if ($postID == -1) {
         $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/create.php?redir=edit\" method=\"post\">\n";
     } else {
-        $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID\" method=\"post\">\n";
+        if ($Request == "true") {
+            $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID&request=true\" method=\"post\">\n";
+        } else {
+            $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID\" method=\"post\">\n";
+        }
     }
 
     $html .= "\t\t\t\t\t<label for=\"pageWriteArea\">Body</label><br>\n";
@@ -282,6 +316,49 @@ if ($Action == "write") {
     } else if ($Error == "exists") {
         $html .= "\t\t\t\t<p class=\"pageError\">A file with this endpoint already exists.</p>\n";
     }
+} else if ($Action == "requests") {
+    $html .= "\t\t\t\t<table class=\"requestUserView\">\n";
+    $html .= "\t\t\t\t\t<tr class=\"requestArticleView\">\n";
+    $html .= "\t\t\t\t\t\t<th class=\"requestUser\">User</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"requestDate\">Date</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"requestMessage\">Message</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"requestEndpoint\">Location</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"requestFile\">File</th>\n";
+    $html .= "\t\t\t\t\t</tr>\n";
+
+    $DatabaseQuery = $Database->query('SELECT * FROM requests');
+    while ($line = $DatabaseQuery->fetchArray()) {
+        if ($line['pageid'] != $postID) {
+            continue;
+        }
+
+        $ID = $line['id'];
+        $Username = $line['username'];
+        $Message = $line['message'];
+        $Date = $line['date'];
+        $Endpoint = $line['endpoint'];
+        $File = $line['file'];
+        $baseFile = basename($File);
+
+        $Message = truncateText($Message, 50);
+
+        if ($Message == "") {
+            $Message = "No message specified.";
+        }
+
+        $html .= "\t\t\t\t\t<tr class=\"requestArticleView\">\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestUser\">$Username</td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestDate\">$Date</td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestMessage\">$Message</td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestEndpoint\"><a href=\"../$Endpoint\">$Endpoint</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestFile\"><a href=\"$File\">$baseFile</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestView\"><a href=\"/edit.php?id=$ID&request=true\">View changes</a></td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"requestDeny\"><a href=\"/remove.php?redir=edit&id=$ID&request=true\">Deny</a></td>\n";
+
+        $html .= "\t\t\t\t\t</tr>\n";
+    }
+
+    $html .= "\t\t\t\t</table>\n";
 }
 
 $html = printFooter($html);
