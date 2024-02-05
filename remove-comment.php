@@ -39,9 +39,6 @@ $DatabaseQuery = $Database->query('SELECT * FROM users');
 if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
     header('Location: login.php?redir=admin');
     die();
-} else if ($_SESSION['type'] != 2) { // not allowed
-    header("Location: /?id=$retid");
-    die();
 }
 
 $DatabaseQuery = $Database->query('SELECT * FROM users');
