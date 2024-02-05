@@ -44,7 +44,9 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
         }
     }
 
-    $Database->exec("INSERT INTO users(username, password, usertype, primaryadmin, numberofcomments, lastused, created, ip, useragent) VALUES('$Username', '$Password', '1', '0', '0', '$lastUsed', '$Created', '$ip', '$userAgent')");
+    $Key = hash('sha256', rand());
+
+    $Database->exec("INSERT INTO users(username, password, usertype, primaryadmin, numberofcomments, lastused, created, ip, useragent, key) VALUES('$Username', '$Password', '1', '0', '0', '$lastUsed', '$Created', '$ip', '$userAgent', '$Key')");
 
     header("Location: login.php");
     die();

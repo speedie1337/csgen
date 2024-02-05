@@ -138,7 +138,9 @@ if ($Type == "Admin") {
     $typeNum = 1;
 }
 
-$Database->exec("INSERT INTO users(username, password, usertype, primaryadmin, numberofcomments, lastused, created, ip, useragent) VALUES('$Username', '$Password', '$typeNum', '$firstUser', '$numberOfComments', '$lastUsed', '$Created', '$ip', '$userAgent')");
+$Key = hash('sha256', rand());
+
+$Database->exec("INSERT INTO users(username, password, usertype, primaryadmin, numberofcomments, lastused, created, ip, useragent, key) VALUES('$Username', '$Password', '$typeNum', '$firstUser', '$numberOfComments', '$lastUsed', '$Created', '$ip', '$userAgent', '$Key')");
 
 if ($Redirect == "admin") {
     header("Location: admin.php?action=users");

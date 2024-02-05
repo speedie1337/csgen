@@ -33,8 +33,9 @@ function createTables($sqlDB) {
      * created (TEXT)
      * ip (TEXT)
      * useragent (TEXT)
+     * key (TEXT)
      */
-    $Database->exec("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, username TEXT, password TEXT, usertype INT, primaryadmin INT, numberofcomments INT, lastused TEXT, created TEXT, ip TEXT, useragent TEXT)");
+    $Database->exec("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, username TEXT, password TEXT, usertype INT, primaryadmin INT, numberofcomments INT, lastused TEXT, created TEXT, ip TEXT, useragent TEXT, key TEXT)");
 
     /* comments table
      * id (INTEGER PRIMARY KEY)
