@@ -73,6 +73,11 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
         session_destroy();
 
         $html .= "\t\t\t\t<p class=\"error\">The two passwords do not match.</p>\n";
+    } else if (isset($_REQUEST['e']) && htmlspecialchars($_REQUEST['e']) == "limit") {
+        session_unset();
+        session_destroy();
+
+        $html .= "\t\t\t\t<p class=\"error\">Calm down. You've created too many accounts.'</p>\n";
     }
 
     $html = printFooter($html);
