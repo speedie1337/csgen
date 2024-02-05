@@ -441,7 +441,10 @@ function printHeader($html, $printpage) {
                 }
 
                 $pid = $i + 1;
-                $html .= "\t\t\t\t<a id=\"modify\" href=\"/edit-page.php?id=$pid\">Request changes</a>\n";
+
+                if (isset($_SESSION['type'])) {
+                    $html .= "\t\t\t\t<a id=\"modify\" href=\"/edit-page.php?id=$pid\">Request changes</a>\n";
+                }
 
                 if ($ret->displayLicense == "true") {
                     $html .= "\t\t\t\tThis page is licensed under the $License license.";
