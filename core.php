@@ -232,10 +232,13 @@ function convertMarkdownToHTML($contents) {
 
                     break;
                 case '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "<span style=\"$matches[1]\">$matches[2]</span>", $out);
+		    $cssCode = htmlspecialchars_decode($matches[1]);
+                    $out = str_replace($matches[0], "<span style=\"$cssCode\">$matches[2]</span>", $out);
                     break;
                 case '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "<span style=\"$matches[1]\">$matches[2]</span>", $out);
+		    $cssCode = htmlspecialchars_decode($matches[1]);
+		    $htmlCode = htmlspecialchars_decode($matches[2]);
+                    $out = str_replace($matches[0], "<span style=\"$cssCode\">$htmlCode</span>", $out);
                     break;
                 case '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
                     $out = str_replace($matches[0], "<div class=\"$matches[1]\">", $out);
@@ -244,16 +247,20 @@ function convertMarkdownToHTML($contents) {
                     $out = str_replace($matches[0], "</div>", $out);
                     break;
                 case '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "<style>\n.$matches[2] {\n\t$matches[1]\n}\n</style>", $out);
+		    $cssCode = htmlspecialchars_decode($matches[1]);
+                    $out = str_replace($matches[0], "<style>\n.$matches[2] {\n\t$cssCode\n}\n</style>\n<div class=\"$matches[2]\">", $out);
                     break;
                 case '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "$matches[1]", $out);
+		    $htmlCode = htmlspecialchars_decode($matches[1]);
+                    $out = str_replace($matches[0], "$htmlCode", $out);
                     break;
                 case '/.*@csgen\.inline.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "<style>$matches[1]</style>", $out);
+		    $cssCode = htmlspecialchars_decode($matches[1]);
+                    $out = str_replace($matches[0], "<style>$cssCode</style>", $out);
                     break;
                 case '/.*@csgen\.inline.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "<script>$matches[1]</script>", $out);
+		    $javascriptCode = htmlspecialchars_decode($matches[1]);
+                    $out = str_replace($matches[0], "<script>$javascriptCode</script>", $out);
                     break;
                 case '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
                     $imgres = array();
