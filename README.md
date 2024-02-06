@@ -15,6 +15,7 @@ generates pages on-the-fly.
 
 - php
 - sqlite3
+- php-mbstring
 - Web server
   - You probably want Apache. It will work with another web server,
   but you'll need to port the .htaccess to your preferred web server.
