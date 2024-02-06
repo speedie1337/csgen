@@ -3,6 +3,10 @@
   src: URL('font.ttf') format('truetype');
 }
 
+.newForm {
+    text-align: left;
+}
+
 .barTitle {
     font-size: 15pt;
     font-family: Noto Sans;
@@ -243,7 +247,7 @@ input[type=file]::file-selector-button {
 }
 
 .warning, .pageWarning, .adminWarning {
-    color: #ffff00;
+    color: #404040;
 }
 
 #sel {

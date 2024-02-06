@@ -124,7 +124,7 @@ $Database->exec("INSERT INTO pages(username, date, endpoint, file) VALUES('$User
 if ($Redirect == "admin") {
     header("Location: admin.php?action=users");
 } else if ($Redirect == "edit") {
-    header("Location: edit.php?action=write");
+    header("Location: edit.php?action=write&e=saved");
 } else {
     header("Location: /");
 }

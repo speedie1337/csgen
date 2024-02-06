@@ -152,7 +152,8 @@ if ($Action == "write") {
         }
     }
 
-    $html .= "\t\t\t\t<p class=\"pageWarning\"><strong>Warning: Switching tab will delete changes made to the Markdown document. Press 'Save' to avoid this.</strong></p>\n";
+    $html .= "\t\t\t\t<p class=\"pageWarning\"><strong>Switching tab will delete changes made to the Markdown document. Press 'Save' to avoid this.</strong></p>\n";
+    $html .= "\t\t\t\t<form class=\"newForm\" action=\"/edit.php\"><input type=\"submit\" value=\"New\"></form>\n";
 
     if ($postID == -1) {
         $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/create.php?redir=edit\" method=\"post\">\n";
@@ -164,7 +165,6 @@ if ($Action == "write") {
         }
     }
 
-    $html .= "\t\t\t\t\t<label for=\"pageWriteArea\">Body</label><br>\n";
     $html .= "\t\t\t\t\t<br><textarea id=\"pageWriteArea\" class=\"pageWriteArea\" name=\"body\" rows=\"32\" cols=\"98\">$defaultText</textarea>\n";
     $html .= "\t\t\t\t\t<br>\n";
     $html .= "\t\t\t\t\t<br><label for=\"endpoint\">Public location</label>\n";
@@ -174,8 +174,7 @@ if ($Action == "write") {
     } else {
         $html .= "\t\t\t\t\t<input type=\"text\" name=\"endpoint\" placeholder=\"/blog/unicorns-and-lollipops\"><br>\n";
     }
-
-    $html .= "\t\t\t\t\t<br><input type=\"submit\" value=\"Save\"><br><br>\n";
+    $html .= "\t\t\t\t\t<br><input class=\"saveForm\" type=\"submit\" value=\"Save\">\n";
     $html .= "\t\t\t\t</form>\n";
 
     // add history button if we're editing an existing page
@@ -194,7 +193,7 @@ if ($Action == "write") {
         $html .= "\t\t\t\t<p class=\"pageError\">A file with this endpoint already exists.</p>\n";
     } else if ($Error == "saved") { // not actually an error but i don't want to make this too complicated
         $Date = date($dateFormat) . " at " . date($timeFormat);
-        $html .= "\t\t\t\t<p class=\"pageSuccess\">$Date: Page at endpoint '$defaultEndpoint' saved.</p>\n";
+        $html .= "\t\t\t\t<p class=\"pageSuccess\">$Date: Your changes have been saved.</p>\n";
     }
 } else if ($Action == "attachments") {
     $html .= "\t\t\t\t<form class=\"pageFileUploadForm\" action=\"/upload.php?redir=edit\" method=\"post\" enctype=\"multipart/form-data\">\n";
