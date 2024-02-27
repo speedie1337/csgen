@@ -81,7 +81,7 @@ $html .= "\t\t\t\t<p>This is where you can change account options.</p>\n";
 if ($allowPasswordChange || $IsCurrentUser) {
     $html .= "\t\t\t\t<h2>Change password</h2>\n";
     $html .= "\t\t\t\t\t<p>If you need to change your password, you can do so here:</p>\n";
-    $html .= "\t\t\t\t\t<form action=\"change.php\" method=\"post\" class=\"changePass\">\n";
+    $html .= "\t\t\t\t\t<<form method="POST" action=\"change.php\" method=\"post\" class=\"changePass\">\n";
 
     if ($IsCurrentUser) {
         $html .= "\t\t\t\t\t\t<label for=\"curpass\">Current password</label>\n";
@@ -112,7 +112,7 @@ if ($allowPasswordChange || $IsCurrentUser) {
 if ($allowUsernameChange || !$IsCurrentUser) {
     $html .= "\t\t\t\t<h2>Change username</h2>\n";
     $html .= "\t\t\t\t\t<p>If you need to change your username, you can do so here:</p>\n";
-    $html .= "\t\t\t\t\t<form action=\"change.php\" method=\"post\" class=\"changeUser\">\n";
+    $html .= "\t\t\t\t\t<<form method="POST" action=\"change.php\" method=\"post\" class=\"changeUser\">\n";
 
     if ($IsCurrentUser) {
         $html .= "\t\t\t\t\t\t<label for=\"curusername\">Current username</label>\n";
@@ -143,7 +143,7 @@ if (!$IsCurrentUser) {
     $html .= "\t\t\t\t<h2>Administrator: Change type</h2>\n";
     $html .= "\t\t\t\t\t<p>If you need to change the type, you can do so here:</p>\n";
 
-    $html .= "\t\t\t\t\t<form action=\"change.php\" method=\"post\" class=\"changeType\">\n";
+    $html .= "\t\t\t\t\t<<form method="POST" action=\"change.php\" method=\"post\" class=\"changeType\">\n";
     $html .= "\t\t\t\t\t\t<label for=\"type\">New type</label>\n";
     $html .= "\t\t\t\t\t\t<select name=\"type\" required>\n";
     if ($Primary == 1) $html .= "\t\t\t\t\t\t\t<option value=\"2\">Administrator</option>\n";

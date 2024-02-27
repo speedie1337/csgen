@@ -57,7 +57,7 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 
     $html .= "\t\t\t<h1 id='registerHeader'>Welcome to $instanceName</h1>\n";
     $html .= "\t\t\t\t<p>To create an account, enter your desired user name and password.</p>\n";
-    $html .= "\t\t\t\t<form action=\"register.php\">\n";
+    $html .= "\t\t\t\t<<form method="POST" action=\"register.php\">\n";
     $html .= "\t\t\t\t\t<input type=\"text\" name=\"username\" placeholder=\"Username\">\n";
     $html .= "\t\t\t\t\t<input type=\"password\" name=\"password\" placeholder=\"Password\">\n";
     $html .= "\t\t\t\t\t<input type=\"password\" name=\"cpassword\" placeholder=\"Confirm password\">\n";

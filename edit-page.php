@@ -67,7 +67,7 @@ $html = "";
 $html = printHeader($html, 0);
 
 $html .= "\t\t\t<h1>Editing '$defaultEndpoint'</h1>\n";
-$html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/post-edit.php?redir=edit-page&id=$postID\" method=\"post\">\n";
+$html .= "\t\t\t\t<<form method="POST" class=\"pageWriteForm\" action=\"/post-edit.php?redir=edit-page&id=$postID\" method=\"post\">\n";
 $html .= "\t\t\t\t\t<br><textarea id=\"pageWriteArea\" class=\"pageWriteArea\" name=\"body\" rows=\"32\" cols=\"98\">$defaultText</textarea>\n";
 $html .= "\t\t\t\t\t<br><br><label for=\"message\">Message</label>\n";
 $html .= "\t\t\t\t\t<input type=\"text\" name=\"message\" placeholder=\"Fix typo in blog post\"><br>\n";
