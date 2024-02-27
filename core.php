@@ -92,7 +92,7 @@ function printCommentField($html, $id, $pageID) {
 
     if (isset($_SESSION['username'])) {
         $html .= "\t\t\t\t\t<p id=\"comment_p\" class=\"comment_p\">Have anything to say? Feel free to comment it below:</p>\n";
-        $html .= "\t\t\t\t\t<form class=\"commentWriteForm\" action=\"/comment.php?id=$id&retid=$pageID\" method=\"post\">\n";
+        $html .= "\t\t\t\t\t<<form method=\"POST\" class=\"commentWriteForm\" action=\"/comment.php?id=$id&retid=$pageID\" method=\"post\">\n";
         $html .= "\t\t\t\t\t\t<br><textarea id=\"commentWriteArea\" class=\"commentWriteArea\" name=\"body\" rows=\"8\" cols=\"50\"></textarea>\n";
         $html .= "\t\t\t\t\t\t<br><br><input type=\"submit\" value=\"Comment\">\n";
         $html .= "\t\t\t\t\t\t<br><br>\n";

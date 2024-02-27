@@ -153,15 +153,15 @@ if ($Action == "write") {
     }
 
     $html .= "\t\t\t\t<p class=\"pageWarning\"><strong>Switching tab will delete changes made to the Markdown document. Press 'Save' to avoid this.</strong></p>\n";
-    $html .= "\t\t\t\t<form class=\"newForm\" action=\"/edit.php\"><input type=\"submit\" value=\"New\"></form>\n";
+    $html .= "\t\t\t\t<<form method=\"POST\" class=\"newForm\" action=\"/edit.php\"><input type=\"submit\" value=\"New\"></form>\n";
 
     if ($postID == -1) {
-        $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/create.php?redir=edit\" method=\"post\">\n";
+        $html .= "\t\t\t\t<<form method=\"POST\" class=\"pageWriteForm\" action=\"/create.php?redir=edit\" method=\"post\">\n";
     } else {
         if ($Request == "true") {
-            $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID&request=true\" method=\"post\">\n";
+            $html .= "\t\t\t\t<<form method=\"POST\" class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID&request=true\" method=\"post\">\n";
         } else {
-            $html .= "\t\t\t\t<form class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID\" method=\"post\">\n";
+            $html .= "\t\t\t\t<<form method=\"POST\" class=\"pageWriteForm\" action=\"/update.php?redir=edit&id=$postID\" method=\"post\">\n";
         }
     }
 
@@ -196,7 +196,7 @@ if ($Action == "write") {
         $html .= "\t\t\t\t<p class=\"pageSuccess\">$Date: Your changes have been saved.</p>\n";
     }
 } else if ($Action == "attachments") {
-    $html .= "\t\t\t\t<form class=\"pageFileUploadForm\" action=\"/upload.php?redir=edit\" method=\"post\" enctype=\"multipart/form-data\">\n";
+    $html .= "\t\t\t\t<<form method=\"POST\" class=\"pageFileUploadForm\" action=\"/upload.php?redir=edit\" method=\"post\" enctype=\"multipart/form-data\">\n";
     $html .= "\t\t\t\t\t<br><input type=\"file\" name=\"file\" id=\"file\">\n";
     $html .= "\t\t\t\t\t<input type=\"submit\" value=\"Upload selected file\" id=\"upload\" name=\"upload\">\n";
     $html .= "\t\t\t\t</form>\n";
