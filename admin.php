@@ -119,7 +119,7 @@ if ($Action == "comments") {
 
     $html .= "\t\t\t\t</table>\n";
 } else if ($Action == "create") {
-    $html .= "\t\t\t\t<<form method=\"POST\" class=\"adminCreateForm\" action=\"create-user.php?redir=admin\" method=\"post\">\n";
+    $html .= "\t\t\t\t<form method=\"POST\" class=\"adminCreateForm\" action=\"create-user.php?redir=admin\" method=\"post\">\n";
     $html .= "\t\t\t\t\t<label for=\"type\">User type</label>\n";
     $html .= "\t\t\t\t\t<select name=\"type\" required>\n";
 

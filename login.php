@@ -161,7 +161,7 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
 
     $html .= "\t\t\t<h1 id='loginHeader'>Login</h1>\n";
     $html .= "\t\t\t\t<p>Enter your username and password to continue.</p>\n";
-    $html .= "\t\t\t\t<<form method=\"POST\" action=\"login.php\">\n";
+    $html .= "\t\t\t\t<form method=\"POST\" action=\"login.php\">\n";
     $html .= "\t\t\t\t\t<input type=\"text\" name=\"username\" placeholder=\"Username\">\n";
     $html .= "\t\t\t\t\t<input type=\"password\" name=\"password\" placeholder=\"Password\">\n";
     if (isset($Redirect)) $html .= "\t\t\t\t\t<input type=\"hidden\" name=\"redir\" value=\"$Redirect\">\n";
