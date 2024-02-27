@@ -17,7 +17,7 @@ $html = printHeader($html, 0);
 $html .= "\t\t\t<h1>Welcome</h1>\n";
 $html .= "\t\t\t\t<p>Before csgen can be used, an administrator user must be created.</p>\n";
 
-$html .= "\t\t\t\t<<form method="POST" class=\"adminCreateForm\" action=\"create-user.php?redir=setup\" method=\"post\">\n";
+$html .= "\t\t\t\t<form class=\"adminCreateForm\" action=\"create-user.php?redir=setup\" method=\"post\">\n";
 $html .= "\t\t\t\t\t<label for=\"username\">Username</label>\n";
 $html .= "\t\t\t\t\t<input type=\"text\" name=\"username\" placeholder=\"Username\">\n";
 $html .= "\t\t\t\t\t<label for=\"password\">Password</label>\n";
