@@ -76,7 +76,7 @@ if (isset($_REQUEST['endpoint']) && htmlspecialchars($_REQUEST['endpoint']) != "
     if ($Redirect == "admin") {
         header("Location: admin.php?e=endpoint");
     } else if ($Redirect == "edit") {
-        header("Location: edit.php?e=endpoint&action=articles");
+        header("Location: edit.php?e=endpoint&action=write");
     } else {
         header("Location: /");
     }
@@ -88,6 +88,17 @@ $DatabaseQuery = $Database->query('SELECT * FROM pages');
 while ($line = $DatabaseQuery->fetchArray()) {
     if ($line['id'] == $id && $id != -1) {
         $File = $line['file'];
+    }
+    if ($line['endpoint'] == $Endpoint && $line['id'] != $id) {
+        if ($Redirect == "admin") {
+            header("Location: admin.php?e=exists");
+        } else if ($Redirect == "edit") {
+            header("Location: edit.php?e=exists&action=write");
+        } else {
+            header("Location: /");
+        }
+
+        die();
     }
 }
 

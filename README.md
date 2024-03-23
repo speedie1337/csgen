@@ -17,8 +17,6 @@ generates pages on-the-fly.
 - sqlite3
 - php-mbstring
 - Web server
-  - You probably want Apache. It will work with another web server,
-  but you'll need to port the .htaccess to your preferred web server.
 
 - On Gentoo, you'll need to enable USE flag `sqlite` for package `dev-lang/php`
 in case you're testing locally using `php -S`.
@@ -30,6 +28,7 @@ plugin if you want to use Apache.
 
 1. Set up a web server with php and sqlite3
 2. Point it to `index.php`
+3. Make sure users cannot access the database or any of the config files (See docs/apache-sample.conf for an example)
 
 When no admin account is set up, you'll be prompted to create one.
 

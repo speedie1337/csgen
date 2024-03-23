@@ -299,6 +299,7 @@ function convertMarkdownToHTML($contents) {
 function printHeader($html, $printpage) {
     include "config.php";
 
+    $pid = -1;
     $id = -1;
 
     if (isset($_REQUEST['id'])) {
@@ -309,15 +310,29 @@ function printHeader($html, $printpage) {
     $DatabaseQuery = $Database->query('SELECT * FROM pages');
 
     $wasFound = 0;
-    $i = 0;
 
     $title = $instanceName;
     $description = $instanceDescription;
 
-    $subdir = isset($_GET['endpoint']) ? $_GET['endpoint'] : '/';
+    $subdir = "";
+    if (isset($_GET['endpoint'])) {
+        $subdir = $_GET['endpoint'];
+    } else if (isset($_SERVER['REQUEST_URI'])) {
+        $subdir = '/' . trim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
+    } else {
+        $subdir = '/';
+    }
+
     while ($line = $DatabaseQuery->fetchArray()) {
         $endpoint = $line['endpoint'];
-        if (((($endpoint == $subdir || "$endpoint/" == "$subdir") && $id == -1) || ($id != -1 && $i == $id)) && $printpage == 1) {
+        if ((($endpoint == $subdir || "$endpoint/" == "$subdir") && $id == -1) || ($id != -1 && $printpage == 1)) {
+            $pid = $line['id'];
+
+            if ($pid != $id && $id != -1) {
+                $pid = -1;
+                continue;
+            }
+
             $wasFound = 1;
             $ret = convertMarkdownToHTML(file_get_contents($line['file']));
 
@@ -404,7 +419,6 @@ function printHeader($html, $printpage) {
             }
 
             if (isset($_SESSION['type']) && $_SESSION['type'] == 2) {
-                $pid = $i + 1;
                 $html .= "\t\t\t\t<a id='edit' href=\"/edit.php?id=$pid\">Edit</a>\n";
             }
 
@@ -448,8 +462,6 @@ function printHeader($html, $printpage) {
                     $html .= "\t\t\t\t<a id=\"source\" href=\"/$sourceFile\">Source</a>\n";
                 }
 
-                $pid = $i + 1;
-
                 if (isset($_SESSION['type'])) {
                     $html .= "\t\t\t\t<a id=\"modify\" href=\"/edit-page.php?id=$pid\">Request changes</a>\n";
                 }
@@ -459,14 +471,13 @@ function printHeader($html, $printpage) {
                 }
 
                 if ($ret->allowComments == "true") {
-                    $html = printCommentField($html, $line['id'], $i);
+                    $html = printCommentField($html, $line['id'], $pid);
                 }
             }
 
-        break;
-        }
+            break;
 
-        $i++;
+        }
     }
 
     if ($wasFound != 1) {
@@ -574,7 +585,8 @@ function printHeader($html, $printpage) {
                     $Err = convertMarkdownToHTML(file_get_contents($err['file']));
 
                     $html .= "\t\t\t$Err->data\n";
-            break;
+
+                    break;
                 }
             }
 
