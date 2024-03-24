@@ -12,10 +12,12 @@ class parsedMarkdown {
     public $license = '';
     public $date = '';
     public $data = '';
+    public $authors = array();
     public $allowComments = false;
     public $displayTitle = false;
     public $displayDate = false;
     public $displaySource = true;
+    public $displayAuthors = false;
     public $displayLicense = false;
 }
 
@@ -155,10 +157,12 @@ function convertMarkdownToHTML($contents) {
         '/.*@csgen\.favicon.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.license.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.addAuthor.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.displayAuthors.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
@@ -176,117 +180,129 @@ function convertMarkdownToHTML($contents) {
 
     $out = $parser->transform($contents);
 
-    foreach ($specialSyntax as $pattern) {
-        $matches = array();
+    while (preg_match('/.*@csgen.*;/', $out)) {
+        foreach ($specialSyntax as $pattern) {
+            $matches = array();
 
-        if (preg_match($pattern, $out, $matches)) {
-            switch ($pattern) {
-                case '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/':
-                    $ret->title = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+            if (preg_match($pattern, $out, $matches)) {
+                switch ($pattern) {
+                    case '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/':
+                        $ret->title = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/':
-                    $ret->description = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.description.*=.*&quot;(.*)(&quot;);/':
+                        $ret->description = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.favicon.*=.*&quot;(.*)(&quot;);/':
-                    $ret->favicon = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.favicon.*=.*&quot;(.*)(&quot;);/':
+                        $ret->favicon = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.license.*=.*&quot;(.*)(&quot;);/':
-                    $ret->license = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.license.*=.*&quot;(.*)(&quot;);/':
+                        $ret->license = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/':
-                    $ret->date = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.date.*=.*&quot;(.*)(&quot;);/':
+                        $ret->date = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/':
-                    $ret->allowComments = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.allowComments.*=.*&quot;(.*)(&quot;);/':
+                        $ret->allowComments = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/':
-                    $ret->displayTitle = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.displayTitle.*=.*&quot;(.*)(&quot;);/':
+                        $ret->displayTitle = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/':
-                    $ret->displayDate = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.displayDate.*=.*&quot;(.*)(&quot;);/':
+                        $ret->displayDate = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/':
-                    $ret->displaySource = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/':
+                        $ret->displaySource = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/':
-                    $ret->displayLicense = $matches[1];
-                    $out = str_replace($matches[0], '', $out);
+                        break;
+                    case '/.*@csgen\.displayAuthors.*=.*&quot;(.*)(&quot;);/':
+                        $ret->displayAuthors = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-		    $cssCode = htmlspecialchars_decode($matches[1]);
-                    $out = str_replace($matches[0], "<span style=\"$cssCode\">$matches[2]</span>", $out);
-                    break;
-                case '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-		    $cssCode = htmlspecialchars_decode($matches[1]);
-		    $htmlCode = htmlspecialchars_decode($matches[2]);
-                    $out = str_replace($matches[0], "<span style=\"$cssCode\">$htmlCode</span>", $out);
-                    break;
-                case '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "<div class=\"$matches[1]\">", $out);
-                    break;
-                case '/.*@csgen\.div.*&lt;END.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
-                    $out = str_replace($matches[0], "</div>", $out);
-                    break;
-                case '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-		    $cssCode = htmlspecialchars_decode($matches[1]);
-                    $out = str_replace($matches[0], "<style>\n.$matches[2] {\n\t$cssCode\n}\n</style>\n<div class=\"$matches[2]\">", $out);
-                    break;
-                case '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
-		    $htmlCode = htmlspecialchars_decode($matches[1]);
-                    $out = str_replace($matches[0], "$htmlCode", $out);
-                    break;
-                case '/.*@csgen\.inline.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
-		    $cssCode = htmlspecialchars_decode($matches[1]);
-                    $out = str_replace($matches[0], "<style>$cssCode</style>", $out);
-                    break;
-                case '/.*@csgen\.inline.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
-		    $javascriptCode = htmlspecialchars_decode($matches[1]);
-                    $out = str_replace($matches[0], "<script>$javascriptCode</script>", $out);
-                    break;
-                case '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
-                    $imgres = array();
-                    if (preg_match('/([0-9]*)x([0-9]*)/', $matches[1], $imgres)) {
-                        $out = str_replace($matches[0], "<img width=\"$imgres[1]\" height=\"$imgres[2]\" src=\"$matches[2]\">", $out);
-                    }
+                        break;
+                    case '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/':
+                        $ret->displayLicense = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.include.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
-                    if (file_exists($matches[1])) {
-                        $out = str_replace($matches[0], file_get_contents($matches[1]), $out);
-                    }
+                        break;
+                    case '/.*@csgen\.addAuthor.*=.*&quot;(.*)(&quot;);/':
+                        $ret->authors[] = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
 
-                    break;
-                case '/.*@csgen\.include.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
-                    if (file_exists($matches[1])) {
-                        $out = str_replace($matches[0], "<link rel=\"stylesheet\" href=\"$matches[1]\">", $out);
-                    }
+                        break;
+                    case '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
+                        $cssCode = htmlspecialchars_decode($matches[1]);
+                        $out = str_replace($matches[0], "<span style=\"$cssCode\">$matches[2]</span>", $out);
+                        break;
+                    case '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
+                        $cssCode = htmlspecialchars_decode($matches[1]);
+                        $htmlCode = htmlspecialchars_decode($matches[2]);
+                        $out = str_replace($matches[0], "<span style=\"$cssCode\">$htmlCode</span>", $out);
+                        break;
+                    case '/.*@csgen\.div.*&lt;START.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
+                        $out = str_replace($matches[0], "<div class=\"$matches[1]\">", $out);
+                        break;
+                    case '/.*@csgen\.div.*&lt;END.*,.*NAME&gt;\(.*&quot;(.*)&quot;\);/':
+                        $out = str_replace($matches[0], "</div>", $out);
+                        break;
+                    case '/.*@csgen\.div.*&lt;STYLE.*,.*NAME&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
+                        $cssCode = htmlspecialchars_decode($matches[1]);
+                        $out = str_replace($matches[0], "<style>\n.$matches[2] {\n\t$cssCode\n}\n</style>\n<div class=\"$matches[2]\">", $out);
+                        break;
+                    case '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
+                        $htmlCode = htmlspecialchars_decode($matches[1]);
+                        $out = str_replace($matches[0], "$htmlCode", $out);
+                        break;
+                    case '/.*@csgen\.inline.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
+                        $cssCode = htmlspecialchars_decode($matches[1]);
+                        $out = str_replace($matches[0], "<style>$cssCode</style>", $out);
+                        break;
+                    case '/.*@csgen\.inline.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
+                        $javascriptCode = htmlspecialchars_decode($matches[1]);
+                        $out = str_replace($matches[0], "<script>$javascriptCode</script>", $out);
+                        break;
+                    case '/.*@csgen\.image.*&lt;SIZE.*,.*PATH&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/':
+                        $imgres = array();
+                        if (preg_match('/([0-9]*)x([0-9]*)/', $matches[1], $imgres)) {
+                            $out = str_replace($matches[0], "<img width=\"$imgres[1]\" height=\"$imgres[2]\" src=\"$matches[2]\">", $out);
+                        }
 
-                    break;
-                case '/.*@csgen\.include.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
-                    if (file_exists($matches[1])) {
-                        $out = str_replace($matches[0], "<script src=\"$matches[1]\"></script>", $out);
-                    }
+                        break;
+                    case '/.*@csgen\.include.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/':
+                        if (file_exists($matches[1])) {
+                            $out = str_replace($matches[0], file_get_contents($matches[1]), $out);
+                        }
 
-                    break;
+                        break;
+                    case '/.*@csgen\.include.*&lt;CSS&gt;\(.*&quot;(.*)&quot;\);/':
+                        if (file_exists($matches[1])) {
+                            $out = str_replace($matches[0], "<link rel=\"stylesheet\" href=\"$matches[1]\">", $out);
+                        }
+
+                        break;
+                    case '/.*@csgen\.include.*&lt;JAVASCRIPT&gt;\(.*&quot;(.*)&quot;\);/':
+                        if (file_exists($matches[1])) {
+                            $out = str_replace($matches[0], "<script src=\"$matches[1]\"></script>", $out);
+                        }
+
+                        break;
+                }
             }
         }
     }
@@ -466,8 +482,24 @@ function printHeader($html, $printpage) {
                     $html .= "\t\t\t\t<a id=\"modify\" href=\"/edit-page.php?id=$pid\">Request changes</a>\n";
                 }
 
-                if ($ret->displayLicense == "true") {
+                if ($ret->displayLicense == "true" && $License != '') {
                     $html .= "\t\t\t\tThis page is licensed under the $License license.";
+                }
+
+                if ($ret->displayAuthors == "true" && $ret->authors) {
+                    $html .= "\t\t\t\t<h2 id=\"authors\">Authors</h2>\n";
+
+                    $html .= "\t\t\t\t<p>";
+
+                    foreach ($ret->authors as $i => $it) {
+                        $html .= "$it";
+
+                        if (count($ret->authors) != $i + 1) {
+                            $html .= ", ";
+                        }
+                    }
+
+                    $html .= "\t\t\t\t</p>\n";
                 }
 
                 if ($ret->allowComments == "true") {

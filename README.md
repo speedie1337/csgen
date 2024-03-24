@@ -50,7 +50,9 @@ Markdown document and it can be at any point.
 - `@csgen.displayDate = "true";`
 - `@csgen.displaySource = "true";`
 - `@csgen.displayLicense = "true";`
+- `@csgen.displayAuthors = "true"`
 - `@csgen.enableComments = "true";`
+- `@csgen.addAuthor = "one author here";`
 - `@csgen.span<STYLE, TEXT>("color: #0000ff;", "thisIsRedText");`
 - `@csgen.span<STYLE, HTML>("color: #0000ff;", "<p>thisIsARedHTMLTag</p>");`
 - `@csgen.inline<HTML>("<small>myHtmlHere</small>");`
