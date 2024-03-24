@@ -19,6 +19,8 @@ class parsedMarkdown {
     public $displaySource = true;
     public $displayAuthors = false;
     public $displayLicense = false;
+    public $pages = array();
+    public $isFeed = false;
 }
 
 function createTables($sqlDB) {
@@ -84,6 +86,63 @@ function createTables($sqlDB) {
 
 function removePrefix($prefix, $html) {
     return preg_replace("/$prefix.*/", "", $html);
+}
+
+function printFeed($ret, $subdir) {
+    include "config.php";
+
+    $title = $ret->title;
+    $desc = $ret->description;
+    $pages = $ret->pages;
+
+    $rss = "";
+    $rss .= "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n";
+    $rss .= "<channel>\n";
+    $rss .= "\t<title>$title</title>\n";
+    $rss .= "\t<description>$desc</description>\n";
+    $rss .= "\t<atom:link href=\"$subdir\" rel=\"self\" type=\"application/rss+xml\"/>\n";
+
+    $rDatabase = createTables($sqlDB);
+    $rDatabaseQuery = $rDatabase->query('SELECT * FROM pages');
+
+    while ($rline = $rDatabaseQuery->fetchArray()) {
+        foreach ($pages as $i => $it) {
+            if ($rline['endpoint'] == $it) {
+                // is our page
+                $page = convertMarkdownToHTML(file_get_contents($rline['file']));
+
+                $ptitle = $page->title;
+                $pdesc = $page->description;
+                $pdata = $page->data;
+                $pdate = $page->date;
+
+                if ($pdate != "") {
+                    $pdate = date('r', strtotime($pdate));
+                } else {
+                    $pdate = "0";
+                }
+
+                $rss .= "\t<item>\n";
+                $rss .= "\t\t<title>$ptitle</title>\n";
+                $rss .= "\t\t<link>$it</link>\n";
+                $rss .= "\t\t<guid>$it</guid>\n";
+                $rss .= "\t\t<pubDate>$pdate</pubDate>\n";
+                $rss .= "\t\t<description>\n";
+                $rss .= "\t\t\t<![CDATA[\n";
+                $rss .= "\t\t\t\t$pdata\n";
+                $rss .= "\t\t\t]]>\n";
+                $rss .= "\t\t</description>\n";
+                $rss .= "\t</item>\n";
+            }
+        }
+    }
+
+    $rss .= "</channel>\n";
+    $rss .= "</rss>";
+
+    print "$rss";
+
+    die();
 }
 
 function printCommentField($html, $id, $pageID) {
@@ -164,6 +223,8 @@ function convertMarkdownToHTML($contents) {
         '/.*@csgen\.displaySource.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayAuthors.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.markAsFeed.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.includePage.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
@@ -241,8 +302,18 @@ function convertMarkdownToHTML($contents) {
                         $out = str_replace($matches[0], '', $out);
 
                         break;
+                    case '/.*@csgen\.markAsFeed.*=.*&quot;(.*)(&quot;);/':
+                        $ret->isFeed = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
+
+                        break;
                     case '/.*@csgen\.addAuthor.*=.*&quot;(.*)(&quot;);/':
                         $ret->authors[] = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
+
+                        break;
+                    case '/.*@csgen\.includePage.*=.*&quot;(.*)(&quot;);/':
+                        $ret->pages[] = $matches[1];
                         $out = str_replace($matches[0], '', $out);
 
                         break;
@@ -464,6 +535,10 @@ function printHeader($html, $printpage) {
             if ($printpage == 1) {
                 $License = $ret->license;
                 $sourceFile = $line['file'];
+
+                if ($ret->isFeed == "true") {
+                    printFeed($ret, $subdir);
+                }
 
                 if ($ret->displayTitle == "true" && $ret->title != "") {
                     $html .= "\t\t\t<h1 id=\"header\">$ret->title</h1>\n";
