@@ -140,6 +140,8 @@ function printFeed($ret, $subdir) {
     $rss .= "</channel>\n";
     $rss .= "</rss>";
 
+    header('Content-type: application/xml');
+
     print "$rss";
 
     die();
