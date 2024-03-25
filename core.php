@@ -19,6 +19,7 @@ class parsedMarkdown {
     public $displaySource = true;
     public $displayAuthors = false;
     public $displayLicense = false;
+    public $redirectTo = '';
     public $pages = array();
     public $isFeed = false;
 }
@@ -227,6 +228,7 @@ function convertMarkdownToHTML($contents) {
         '/.*@csgen\.displayLicense.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.markAsFeed.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.includePage.*=.*&quot;(.*)(&quot;);/',
+        '/.*@csgen\.redirectTo.*=.*&quot;(.*)(&quot;);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*TEXT&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.span.*&lt;STYLE.*,.*HTML&gt;\(.*&quot;(.*)&quot;.*, &quot;(.*)&quot;\);/',
         '/.*@csgen\.inline.*&lt;HTML&gt;\(.*&quot;(.*)&quot;\);/',
@@ -316,6 +318,11 @@ function convertMarkdownToHTML($contents) {
                         break;
                     case '/.*@csgen\.includePage.*=.*&quot;(.*)(&quot;);/':
                         $ret->pages[] = $matches[1];
+                        $out = str_replace($matches[0], '', $out);
+
+                        break;
+                    case '/.*@csgen\.redirectTo.*=.*&quot;(.*)(&quot;);/':
+                        $ret->redirectTo = $matches[1];
                         $out = str_replace($matches[0], '', $out);
 
                         break;
@@ -535,6 +542,12 @@ function printHeader($html, $printpage) {
             $html .= "\t\t<div class=\"content\">\n";
 
             if ($printpage == 1) {
+                if ($ret->redirectTo != '') {
+                    $path = $ret->redirectTo;
+                    header("Location: $path");
+                    die();
+                }
+
                 $License = $ret->license;
                 $sourceFile = $line['file'];
 

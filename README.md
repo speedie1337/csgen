@@ -55,6 +55,7 @@ Markdown document and it can be at any point.
 - `@csgen.addAuthor = "one author here";`
 - `@csgen.markAsFeed = "false";`
 - `@csgen.includePage = "/blog/my-awesome-blog-post";`
+- `@csgen.redirectTo = "/blog/rss.xml";`
 - `@csgen.span<STYLE, TEXT>("color: #0000ff;", "thisIsRedText");`
 - `@csgen.span<STYLE, HTML>("color: #0000ff;", "<p>thisIsARedHTMLTag</p>");`
 - `@csgen.inline<HTML>("<small>myHtmlHere</small>");`
