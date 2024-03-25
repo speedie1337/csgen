@@ -1,10 +1,8 @@
+@import url("properties.css");
+
 @font-face {
   font-family: 'Noto Sans';
   src: URL('font.ttf') format('truetype');
-}
-
-.newForm {
-    text-align: left;
 }
 
 .barTitle {
@@ -12,21 +10,7 @@
     font-family: Noto Sans;
     font-weight: normal;
 
-    position: sticky;
-    top: 0px;
-    z-index: 6;
     background-color: #363636;
-    margin: 10px;
-    padding: 5px;
-    width: auto;
-    float: left;
-
-    border-radius: 10px;
-}
-
-.barTitle p {
-    padding: 0px;
-    margin: 0px;
 }
 
 .barMenu {
@@ -34,21 +18,7 @@
     font-family: Noto Sans;
     font-weight: normal;
 
-    position: sticky;
-    top: 0px;
-    z-index: 6;
     background-color: #363636;
-    margin: 10px;
-    padding: 0px;
-    width: auto;
-    float: right;
-
-    border-radius: 10px;
-}
-
-.barTitle a {
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 input, select, textarea {
@@ -56,19 +26,14 @@ input, select, textarea {
     font-family: Noto Sans;
     font-weight: normal;
 
-    padding: 7px;
     border-color: #363636;
-    border-width: 0px;
     background-color: #363636;
     color: #f0eee4;
-
-    border-radius: 10px;
 }
 
 input[type=file] {
     background-color: #262626;
     color: #646464;
-    padding: 5px;
 }
 
 input[type=file]::file-selector-button {
@@ -76,59 +41,26 @@ input[type=file]::file-selector-button {
     font-family: Noto Sans;
     font-weight: normal;
 
-    width: 50%;
-    padding: 5px;
     border-color: #363636;
-    border-width: 0px;
     background-color: #262626;
     color: #f0eee4;
 }
 
-#web {
-    padding: 10px;
-}
-
 .actionmenu {
   background-color: #3e3e3e;
-  padding: 11px;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 10px;
+  color: #ffffff;
 }
 
 .actionmenu:hover, .actionmenu:focus {
   background-color: #646464;
 }
 
-.dropdown {
-  position: relative;
-  display: block;
-}
-
 .dropdown-content {
-  margin-left: -125px;
-  border-radius: 10px;
-  display: none;
-  position: absolute;
   background-color: #464646;
-  font-size: 10pt;
-  min-width: 160px;
-  overflow: auto;
-  z-index: 1;
-  margin-top: 10px;
-}
-
-.dropdown-content p {
-  padding: 0px;
-  margin: 0px;
 }
 
 .dropdown-content a {
   color: #f0eee4;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
 }
 
 .commentAuthor {
@@ -142,8 +74,6 @@ input[type=file]::file-selector-button {
 .dropdown-content a:hover {
     background-color: #262626;
 }
-
-.show {display: block;}
 
 #title {
     color: #f0eee4;
@@ -159,13 +89,10 @@ input[type=file]::file-selector-button {
 
 .title {
     color: #f0eee4;
-    padding-left: 2px;
 }
 
 .links {
     color: #66667d;
-    padding: 5px;
-    padding-left: 2px;
 }
 
 .error, .adminError, .userError, .pageError {
@@ -182,68 +109,22 @@ input[type=file]::file-selector-button {
     font-weight: normal;
 
     color: #f0eee4;
-    padding: 5px;
-    max-width: 1000px;
-    margin: auto;
-    text-align: center;
-
-    padding-bottom: 100px;
-}
-
-.content ul {
-  padding-left: 0;
-  list-style-position: inside;
-}
-
-.content table {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
-}
-
-.content th, td {
-    padding-right: 25px;
 }
 
 .comment {
-    margin: 5px;
-    padding: 10px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    text-align: left;
     background-color: #262626;
-    border-radius: 10px;
 }
 
 #commentRemove {
     color: #eb345b;
 }
 
-.content table {
-    width: 100%;
-}
-
 .adminLinks, .pageLinks {
-    width: 100%;
-    margin: 0px;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: #363636;
-    border-radius: 10px;
 }
 
 .allLinks {
-    margin: 0px;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: #363636;
-    border-radius: 10px;
-}
-
-.adminCreateForm {
-    padding: 10px;
 }
 
 .warning, .pageWarning, .adminWarning {
@@ -251,25 +132,19 @@ input[type=file]::file-selector-button {
 }
 
 #sel {
-    text-decoration: underline;
     color: #f0eee4;
 }
 
 a {
     color: #89bfff;
-    text-decoration: none;
-    transition: 0.1s;
 }
+
 a:hover {
     color: #ccccff;
-    text-decoration: underline;
 }
 
 body {
-    margin: 0px;
-    padding: 0px;
     background-color: #212121;
-    overflow-x: hidden;
 }
 
 footer {
@@ -277,12 +152,159 @@ footer {
     font-family: Noto Sans;
     font-weight: normal;
 
-    padding: 5px;
     color: #f0eee4;
     background-color: #363636;
-    text-align: center;
+}
 
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
+@media (prefers-color-scheme: light) {
+    .barTitle {
+        font-size: 15pt;
+        font-family: Noto Sans;
+        font-weight: normal;
+
+        background-color: #ececec;
+    }
+
+    .barMenu {
+        font-size: 15pt;
+        font-family: Noto Sans;
+        font-weight: normal;
+
+        background-color: #ececec;
+    }
+
+    input, select, textarea {
+        font-size: 12pt;
+        font-family: Noto Sans;
+        font-weight: normal;
+
+        border-color: #ececec;
+        background-color: #ececec;
+        color: #222222;
+    }
+
+    input[type=file] {
+        background-color: #f2f2f2;
+        color: #646464;
+    }
+
+    input[type=file]::file-selector-button {
+        font-size: 12pt;
+        font-family: Noto Sans;
+        font-weight: normal;
+
+        border-color: #ececec;
+        background-color: #f2f2f2;
+        color: #222222;
+    }
+
+    .actionmenu {
+      background-color: #ececec;
+      color: #222222;
+    }
+
+    .actionmenu:hover, .actionmenu:focus {
+      background-color: #f2f2f2;
+    }
+
+    .dropdown-content {
+      background-color: #ececec;
+    }
+
+    .dropdown-content a {
+      color: #222222;
+    }
+
+    .commentAuthor {
+      color: #00ff51;
+    }
+
+    .commentAuthorMod {
+      color: #ff99aa;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f2f2f2;
+    }
+
+    #title {
+        color: #222222;
+    }
+
+    #administration {
+        color: #ff99aa;
+    }
+
+    #edit {
+        color: #42a7f5;
+    }
+
+    .title {
+        color: #222222;
+    }
+
+    .links {
+        color: #42a7f5;
+    }
+
+    .error, .adminError, .userError, .pageError {
+        color: #ff0000;
+    }
+
+    .pageSuccess {
+        color: #00ff51;
+    }
+
+    .content {
+        font-size: 12pt;
+        font-family: Noto Sans;
+        font-weight: normal;
+
+        color: #222222;
+    }
+
+    .comment {
+        background-color: #f2f2f2;
+    }
+
+    #commentRemove {
+        color: #eb345b;
+    }
+
+    .adminLinks, .pageLinks {
+        background-color: #ececec;
+    }
+
+    .allLinks {
+        background-color: #ececec;
+    }
+
+    .warning, .pageWarning, .adminWarning {
+        color: #f4f4f4;
+    }
+
+    #sel {
+        color: #222222;
+    }
+
+    a {
+        color: #89bfff;
+    }
+
+    a:hover {
+        color: #899fff;
+    }
+
+    body {
+        background-color: #fafafa;
+    }
+
+    footer {
+        font-size: 12pt;
+        font-family: Noto Sans;
+        font-weight: normal;
+
+        color: #222222;
+        background-color: #f4f4f4;
+    }
 }
