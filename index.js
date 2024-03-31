@@ -1,7 +1,32 @@
+function is_scrollable(el) { /* https://www.geeksforgeeks.org/how-to-check-if-a-scrollbar-is-visible/ */
+    var y1 = el.scrollTop;
+    el.scrollTop += 1;
+    var y2 = el.scrollTop;
+    el.scrollTop -= 1;
+    var y3 = el.scrollTop;
+    el.scrollTop = y1;
+
+    var x1 = el.scrollLeft;
+    el.scrollLeft += 1;
+    var x2 = el.scrollLeft;
+    el.scrollLeft -= 1;
+    var x3 = el.scrollLeft;
+    el.scrollLeft = x1;
+
+    return {
+        h: x1 !== x2 || x2 !== x3,
+        v: y1 !== y2 || y2 !== y3
+    }
+}
+
 window.onload = function() {
     var footer = document.getElementById("footer");
 
     footer.style.display = "none";
+
+    if (is_scrollable(document.documentElement)) {
+        footer.style.display = "block";
+    }
 }
 
 window.onscroll = function() {
