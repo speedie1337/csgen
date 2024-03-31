@@ -55,7 +55,7 @@ $html = "";
 $html = printHeader($html, 0);
 
 $html .= "\t\t\t<h1>Administrator panel</h1>\n";
-$html .= "\t\t\t\t<div class=\"adminLinks\">\n";
+$html .= "\t\t\t\t<div class=\"admin_links\">\n";
 $html .= "\t\t\t\t\t<span id='adminSpan' class='title'>\n";
 
 if ($Action == "users") {
@@ -119,7 +119,7 @@ if ($Action == "comments") {
 
     $html .= "\t\t\t\t</table>\n";
 } else if ($Action == "create") {
-    $html .= "\t\t\t\t<form method=\"POST\" class=\"adminCreateForm\" action=\"create-user.php?redir=admin\" method=\"post\">\n";
+    $html .= "\t\t\t\t<form method=\"POST\" class=\"admin_create_form\" action=\"create-user.php?redir=admin\" method=\"post\">\n";
     $html .= "\t\t\t\t\t<label for=\"type\">User type</label>\n";
     $html .= "\t\t\t\t\t<select name=\"type\" required>\n";
 
@@ -160,7 +160,7 @@ if ($Action == "comments") {
     $html .= "\t\t\t\t\t\t<th class=\"adminUser\">User</th>\n";
     $html .= "\t\t\t\t\t\t<th class=\"adminNumberOfComments\">Comments</th>\n";
     $html .= "\t\t\t\t\t\t<th class=\"adminLastUsed\">Last used</th>\n";
-    $html .= "\t\t\t\t\t\t<th class=\"adminCreated\">Created</th>\n";
+    $html .= "\t\t\t\t\t\t<th class=\"admin_created\">Created</th>\n";
     $html .= "\t\t\t\t\t\t<th class=\"adminIP\">IP</th>\n";
     $html .= "\t\t\t\t\t\t<th class=\"adminUserAgent\">User agent</th>\n";
     $html .= "\t\t\t\t\t\t<th class=\"adminuserType\">User type</th>\n";
@@ -198,7 +198,7 @@ if ($Action == "comments") {
         $html .= "\t\t\t\t\t\t<td class=\"adminUser\">$Username</td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"adminNumberOfComments\"><a href=\"/admin.php?action=comments&id=$ID\">$NumberOfComments</a></td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"adminLastUsed\">$LastUsed</td>\n";
-        $html .= "\t\t\t\t\t\t<td class=\"adminCreated\">$Created</td>\n";
+        $html .= "\t\t\t\t\t\t<td class=\"admin_created\">$Created</td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"adminIP\">$IP</td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"adminUserAgent\">$UserAgent</td>\n";
         $html .= "\t\t\t\t\t\t<td class=\"adminuserType\">$userType</td>\n";

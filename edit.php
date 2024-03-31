@@ -70,7 +70,7 @@ $html = "";
 $html = printHeader($html, 0);
 
 $html .= "\t\t\t<h1>Page manager</h1>\n";
-$html .= "\t\t\t\t<div class=\"pageLinks\">\n";
+$html .= "\t\t\t\t<div class=\"page_links\">\n";
 $html .= "\t\t\t\t\t<span id=\"pageSpan\" class=\"title\">\n";
 
 if ($Action == "write") {
@@ -153,7 +153,7 @@ if ($Action == "write") {
     }
 
     $html .= "\t\t\t\t<p class=\"pageWarning\"><strong>Switching tab will delete changes made to the Markdown document. Press 'Save' to avoid this.</strong></p>\n";
-    $html .= "\t\t\t\t<form method=\"POST\" class=\"newForm\" action=\"/edit.php\"><input type=\"submit\" value=\"New\"></form>\n";
+    $html .= "\t\t\t\t<form method=\"POST\" class=\"new_form\" action=\"/edit.php\"><input type=\"submit\" value=\"New\"></form>\n";
 
     if ($postID == -1) {
         $html .= "\t\t\t\t<form method=\"POST\" class=\"pageWriteForm\" action=\"/create.php?redir=edit\" method=\"post\">\n";

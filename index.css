@@ -5,7 +5,7 @@
   src: URL('font.ttf') format('truetype');
 }
 
-.barTitle {
+.bar_title {
     font-size: 15pt;
     font-family: Noto Sans;
     font-weight: normal;
@@ -13,7 +13,7 @@
     background-color: #363636;
 }
 
-.barMenu {
+.bar_menu {
     font-size: 15pt;
     font-family: Noto Sans;
     font-weight: normal;
@@ -47,28 +47,28 @@ input[type=file]::file-selector-button {
 }
 
 .actionmenu {
-  background-color: #3e3e3e;
-  color: #ffffff;
+    background-color: #3e3e3e;
+    color: #ffffff;
 }
 
 .actionmenu:hover, .actionmenu:focus {
-  background-color: #646464;
+    background-color: #646464;
 }
 
 .dropdown-content {
-  background-color: #464646;
+    background-color: #464646;
 }
 
 .dropdown-content a {
-  color: #f0eee4;
+    color: #f0eee4;
 }
 
 .commentAuthor {
-  color: #00ff51;
+    color: #00ff51;
 }
 
 .commentAuthorMod {
-  color: #ffc0cb;
+    color: #ffc0cb;
 }
 
 .dropdown-content a:hover {
@@ -119,11 +119,11 @@ input[type=file]::file-selector-button {
     color: #eb345b;
 }
 
-.adminLinks, .pageLinks {
+.admin_links, .page_links {
     background-color: #363636;
 }
 
-.allLinks {
+.all_links {
     background-color: #363636;
 }
 
@@ -157,7 +157,7 @@ footer {
 }
 
 @media (prefers-color-scheme: light) {
-    .barTitle {
+    .bar_title {
         font-size: 15pt;
         font-family: Noto Sans;
         font-weight: normal;
@@ -165,7 +165,7 @@ footer {
         background-color: #ececec;
     }
 
-    .barMenu {
+    .bar_menu {
         font-size: 15pt;
         font-family: Noto Sans;
         font-weight: normal;
@@ -199,28 +199,28 @@ footer {
     }
 
     .actionmenu {
-      background-color: #ececec;
-      color: #222222;
+        background-color: #ececec;
+        color: #222222;
     }
 
     .actionmenu:hover, .actionmenu:focus {
-      background-color: #f2f2f2;
+        background-color: #f2f2f2;
     }
 
     .dropdown-content {
-      background-color: #ececec;
+        background-color: #ececec;
     }
 
     .dropdown-content a {
-      color: #222222;
+        color: #222222;
     }
 
     .commentAuthor {
-      color: #00ff51;
+        color: #00ff51;
     }
 
     .commentAuthorMod {
-      color: #ff99aa;
+        color: #ff99aa;
     }
 
     .dropdown-content a:hover {
@@ -271,11 +271,11 @@ footer {
         color: #eb345b;
     }
 
-    .adminLinks, .pageLinks {
+    .admin_links, .page_links {
         background-color: #ececec;
     }
 
-    .allLinks {
+    .all_links {
         background-color: #ececec;
     }
 

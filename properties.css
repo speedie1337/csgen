@@ -1,8 +1,13 @@
-.newForm {
+@keyframes fade_in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.new_form {
     text-align: left;
 }
 
-.barTitle {
+.bar_title {
     position: sticky;
     top: 0px;
     z-index: 6;
@@ -14,12 +19,12 @@
     border-radius: 10px;
 }
 
-.barTitle p {
+.bar_title p {
     padding: 0px;
     margin: 0px;
 }
 
-.barMenu {
+.bar_menu {
     position: sticky;
     top: 0px;
     z-index: 6;
@@ -31,7 +36,7 @@
     border-radius: 10px;
 }
 
-.barTitle a {
+.bar_title a {
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -87,6 +92,7 @@ input[type=file]::file-selector-button {
   overflow: auto;
   z-index: 1;
   margin-top: 10px;
+  animation: fade_in 0.3s;
 }
 
 .dropdown-content p {
@@ -112,6 +118,7 @@ input[type=file]::file-selector-button {
 }
 
 .content {
+    animation: fade_in 0.1s;
     padding: 5px;
     max-width: 1000px;
     margin: auto;
@@ -148,7 +155,7 @@ input[type=file]::file-selector-button {
     width: 100%;
 }
 
-.adminLinks, .pageLinks {
+.admin_links, .page_links {
     width: 100%;
     margin: 0px;
     padding: 5px;
@@ -157,7 +164,7 @@ input[type=file]::file-selector-button {
     border-radius: 10px;
 }
 
-.allLinks {
+.all_links {
     margin: 0px;
     padding: 5px;
     padding-left: 10px;
@@ -165,7 +172,7 @@ input[type=file]::file-selector-button {
     border-radius: 10px;
 }
 
-.adminCreateForm {
+.admin_create_form {
     padding: 10px;
 }
 
@@ -197,4 +204,9 @@ footer {
     width: calc(100% - 30px);
     border-radius: 10px;
     margin: 10px;
+    margin-top: 20px;
+}
+
+#footer, #bar_title, #bar_menu {
+    animation: fade_in 0.3s;
 }

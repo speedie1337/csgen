@@ -450,7 +450,7 @@ function printHeader($html, $printpage) {
 
             $html .= "<!DOCTYPE html>\n";
             $html .= "<html>\n";
-            $html .= "\t<head>\n";
+            $html .= "\t<head id=\"header\">\n";
             $html .= "\t\t<meta name=\"description\" content=\"$description\">\n";
             $html .= "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n";
 
@@ -464,7 +464,7 @@ function printHeader($html, $printpage) {
             if (file_exists($javaScript)) $html .= "\t\t<script src=\"/$javaScript\"></script>\n";
 
             $html .= "\t\t<title>$title</title>\n";
-            $html .= "\t\t<div class=\"barTitle\">\n";
+            $html .= "\t\t<div id=\"bar_title\" class=\"bar_title\">\n";
 
             $endpointFound = 0;
             $HeaderDatabaseQuery = $Database->query('SELECT * FROM pages');
@@ -485,7 +485,7 @@ function printHeader($html, $printpage) {
             }
 
             $html .= "\t\t</div>\n";
-            $html .= "\t\t<div class=\"barMenu\">\n";
+            $html .= "\t\t<div id=\"bar_menu\" class=\"bar_menu\">\n";
 
             $html .= "\t\t\t<script>\n";
             $html .= "\t\t\t\tfunction pelem() {\n";
@@ -543,7 +543,7 @@ function printHeader($html, $printpage) {
             $html .= "\t\t</div>\n";
             $html .= "\t</head>\n";
             $html .= "\t<body>\n";
-            $html .= "\t\t<div class=\"content\">\n";
+            $html .= "\t\t<div id=\"content\" class=\"content\">\n";
 
             if ($printpage == 1) {
                 if ($ret->redirectTo != '') {
@@ -621,7 +621,7 @@ function printHeader($html, $printpage) {
         if (file_exists($javaScript)) $html .= "\t\t<script src=\"/$javaScript\"></script>\n";
 
         $html .= "\t\t<title>$title</title>\n";
-        $html .= "\t\t<div class=\"barTitle\">\n";
+        $html .= "\t\t<div id=\"bar_title\" class=\"bar_title\">\n";
 
         $endpointFound = 0;
         $HeaderDatabaseQuery = $Database->query('SELECT * FROM pages');
@@ -642,7 +642,7 @@ function printHeader($html, $printpage) {
         }
 
         $html .= "\t\t</div>\n";
-        $html .= "\t\t<div class=\"barMenu\">\n";
+        $html .= "\t\t<div id=\"bar_menu\" class=\"bar_menu\">\n";
 
         $html .= "\t\t\t<script>\n";
         $html .= "\t\t\t\tfunction pelem() {\n";
@@ -700,7 +700,7 @@ function printHeader($html, $printpage) {
         $html .= "\t\t</div>\n";
         $html .= "\t</head>\n";
         $html .= "\t<body>\n";
-        $html .= "\t\t<div class=\"content\">\n";
+        $html .= "\t\t<div id=\"content\" class=\"content\">\n";
 
         if ($printpage == 1) {
             $ErrDatabaseQuery = $Database->query('SELECT * FROM pages');
@@ -730,7 +730,7 @@ function printFooter($html) {
 
     $html .= "\t\t</div>\n";
     $html .= "\t</body>\n";
-    $html .= "\t<footer>\n";
+    $html .= "\t<footer id='footer'>\n";
     $html .= "\t\t<div class='footer'>\n";
 
     $Database = createTables($sqlDB);
