@@ -195,4 +195,6 @@ footer {
     position: fixed;
     bottom: 0px;
     width: 100%;
+    border-radius: 10px;
+    margin: 10px;
 }

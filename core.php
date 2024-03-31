@@ -181,16 +181,20 @@ function printCommentField($html, $id, $pageID) {
             if ($line['usertype'] == 2) {
                 $html .= "\t\t\t\t\t\t<p style=\"text-align: left;\"><span class=\"commentAuthorMod\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
-                if ($line['username'] == htmlspecialchars($_SESSION['username']) || htmlspecialchars($_SESSION['type']) == 2) {
-                    $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
+                if (isset($_SESSION['username']) && isset($_SESSION['type'])) {
+                    if ($line['username'] == htmlspecialchars($_SESSION['username']) || htmlspecialchars($_SESSION['type']) == 2) {
+                        $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
+                    }
                 }
 
                 $html .= "\t\t\t\t\t\t</p>\n";
             } else {
                 $html .= "\t\t\t\t\t\t<p style=\"text-align: left;\"><span class=\"commentAuthor\">$username</span> on <span class=\"commentDate\">$date:</span>\n";
 
-                if ($line['username'] == htmlspecialchars($_SESSION['username']) || htmlspecialchars($_SESSION['type']) == 2) {
-                    $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
+                if (isset($_SESSION['username']) && isset($_SESSION['type'])) {
+                    if ($line['username'] == htmlspecialchars($_SESSION['username']) || htmlspecialchars($_SESSION['type']) == 2) {
+                        $html .= "<a id=\"commentRemove\" href=\"/remove-comment.php?id=$cid&retid=$pageID\">Remove</a></p>\n";
+                    }
                 }
 
                 $html .= "\t\t\t\t\t\t</p>\n";
