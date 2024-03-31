@@ -194,7 +194,7 @@ footer {
 
     position: fixed;
     bottom: 0px;
-    width: 100%;
+    width: calc(100% - 30px);
     border-radius: 10px;
     margin: 10px;
 }
