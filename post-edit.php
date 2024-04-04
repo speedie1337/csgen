@@ -30,10 +30,7 @@ $Database = createTables($sqlDB);
 $DatabaseQuery = $Database->query('SELECT * FROM users');
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
-    header('Location: login.php?redir=admin');
-    die();
-} else if (htmlspecialchars($_SESSION['type']) != 2) { // not allowed
-    header('Location: /');
+    header('Location: login.php');
     die();
 }
 
