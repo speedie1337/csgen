@@ -10,9 +10,6 @@ $postID = -1;
 if (!isset($_SESSION['username']) || !isset($_SESSION['password']) || !isset($_SESSION['type'])) {
     header('Location: login.php?redir=edit-page');
     die();
-} else if (htmlspecialchars($_SESSION['type']) != 2) { // not allowed
-    header('Location: /');
-    die();
 }
 
 if (!isset($_REQUEST['id'])) {
