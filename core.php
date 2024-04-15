@@ -543,7 +543,7 @@ function printHeader($html, $printpage) {
             $html .= "\t\t</div>\n";
             $html .= "\t</head>\n";
             $html .= "\t<body>\n";
-            $html .= "\t\t<div id=\"content\" class=\"content\">\n";
+            $html .= "\t\t<div id=\"content\" class=\"content\">\n<br><br>\n";
 
             if ($printpage == 1) {
                 if ($ret->redirectTo != '') {
