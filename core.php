@@ -215,7 +215,7 @@ function convertMarkdownToHTML($contents) {
 
     $ret = new parsedMarkdown();
     $parser = new MarkdownExtra;
-    $parser->no_markup = true;
+    $parser->no_markup = false;
 
     $specialSyntax = array(
         '/.*@csgen\.title.*=.*&quot;(.*)(&quot;);/',
